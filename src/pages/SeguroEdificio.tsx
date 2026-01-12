@@ -77,27 +77,19 @@ const SeguroEdificio = () => {
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Left - Content */}
-            <div className="text-center lg:text-left">
-              {/* Brand Badge */}
+            <div className="text-center md:text-left">
+              {/* Brand Badge - Larger and responsive */}
               <motion.div 
-                className="flex items-center justify-center lg:justify-start gap-3 mb-6"
+                className="flex items-center justify-center md:justify-start gap-3 mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <img src={logoBlanco} alt="Seguros Gaete" className="h-12 lg:h-16 w-auto" />
+                <img src={logoBlanco} alt="Seguros Gaete" className="h-20 sm:h-24 lg:h-32 w-auto" />
               </motion.div>
               
-              <motion.span 
-                className="inline-flex items-center gap-2 px-4 py-2 bg-background/20 backdrop-blur-sm rounded-full text-primary-foreground text-sm mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Building2 className="w-4 h-4" /> Cobertura personalizada
-              </motion.span>
-              <motion.h1 
+              <motion.h1
                 className="text-3xl lg:text-5xl font-bold text-primary-foreground mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -124,9 +116,9 @@ const SeguroEdificio = () => {
               </motion.div>
             </div>
 
-            {/* Right - Large Logo (hidden on mobile) */}
+            {/* Right - Large Logo (visible from md/tablet) */}
             <motion.div 
-              className="hidden lg:flex justify-center items-center"
+              className="hidden md:flex justify-center items-center"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -134,7 +126,7 @@ const SeguroEdificio = () => {
               <img 
                 src={logoBlanco} 
                 alt="Seguros Gaete" 
-                className="h-64 xl:h-80 w-auto drop-shadow-2xl opacity-90"
+                className="h-48 lg:h-64 xl:h-80 w-auto drop-shadow-2xl opacity-90"
               />
             </motion.div>
           </div>
