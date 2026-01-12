@@ -1,163 +1,106 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  ArrowRight, 
-  Building2, 
-  Shield, 
-  Users, 
-  Clock, 
-  Headphones,
-  CheckCircle,
-  MessageCircle,
-  DollarSign,
-  Target,
-  Handshake,
-  Trophy,
-  Award,
-  AlertTriangle,
-  Lightbulb,
-  Network
-} from 'lucide-react';
+import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
-import PartnerLogo from '@/components/shared/PartnerLogo';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
-import logoVertical from '@/assets/logo-vertical-color.png';
-
-const tranquilidadBenefits = [
-  {
-    icon: DollarSign,
-    highlight: "Ahorra dinero",
-    title: "",
-    description: "Nuestra trayectoria nos permite encontrar los mejores productos en relación precio/calidad del mercado."
-  },
-  {
-    icon: Target,
-    highlight: "Centraliza",
-    title: " tus seguros",
-    description: "Administramos todos tus seguros en un solo lugar para que no tengas que preocuparte de nada más."
-  },
-  {
-    icon: Handshake,
-    highlight: "Confía",
-    title: " en nosotros",
-    description: "Establecemos relaciones cercanas y duraderas con cada cliente, brindando atención personalizada."
-  },
-  {
-    icon: Trophy,
-    highlight: "Elige",
-    title: " lo mejor",
-    description: "Te ofrecemos los mejores productos del mercado en términos de coberturas, precios y respaldo."
-  },
-  {
-    icon: Award,
-    highlight: "35 años",
-    title: " de experiencia",
-    description: "Más de tres décadas asesorando a personas y empresas en la protección de su patrimonio."
-  },
-  {
-    icon: AlertTriangle,
-    highlight: "No pagues en vano,",
-    title: " Asegúrate bien",
-    description: "El seguro más barato no necesariamente es el que te va a proteger mejor cuando lo necesites."
-  },
-  {
-    icon: Network,
-    highlight: "Miembros de ANS",
-    title: "",
-    description: "Somos parte de la Alianza de Negocios en Seguros, la red de corredores más grande de Chile."
-  },
-  {
-    icon: Lightbulb,
-    highlight: "Solucionamos",
-    title: " tus problemas",
-    description: "Nos encargamos de todos los trámites ante las aseguradoras en caso de siniestro."
-  },
-];
-
+const tranquilidadBenefits = [{
+  icon: DollarSign,
+  highlight: "Ahorra dinero",
+  title: "",
+  description: "Nuestra trayectoria nos permite encontrar los mejores productos en relación precio/calidad del mercado."
+}, {
+  icon: Target,
+  highlight: "Centraliza",
+  title: " tus seguros",
+  description: "Administramos todos tus seguros en un solo lugar para que no tengas que preocuparte de nada más."
+}, {
+  icon: Handshake,
+  highlight: "Confía",
+  title: " en nosotros",
+  description: "Establecemos relaciones cercanas y duraderas con cada cliente, brindando atención personalizada."
+}, {
+  icon: Trophy,
+  highlight: "Elige",
+  title: " lo mejor",
+  description: "Te ofrecemos los mejores productos del mercado en términos de coberturas, precios y respaldo."
+}, {
+  icon: Award,
+  highlight: "35 años",
+  title: " de experiencia",
+  description: "Más de tres décadas asesorando a personas y empresas en la protección de su patrimonio."
+}, {
+  icon: AlertTriangle,
+  highlight: "No pagues en vano,",
+  title: " Asegúrate bien",
+  description: "El seguro más barato no necesariamente es el que te va a proteger mejor cuando lo necesites."
+}, {
+  icon: Network,
+  highlight: "Miembros de ANS",
+  title: "",
+  description: "Somos parte de la Alianza de Negocios en Seguros, la red de corredores más grande de Chile."
+}, {
+  icon: Lightbulb,
+  highlight: "Solucionamos",
+  title: " tus problemas",
+  description: "Nos encargamos de todos los trámites ante las aseguradoras en caso de siniestro."
+}];
 const Index = () => {
-  return (
-    <Layout>
+  return <Layout>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] lg:min-h-[80vh] flex items-center overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 z-0">
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ 
-              backgroundImage: `url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1920')` 
-            }}
-          />
+          <div className="absolute inset-0 bg-cover bg-center" style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1920')`
+        }} />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
         </div>
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Logo - First on mobile/tablet, right on desktop */}
-            <motion.div 
-              className="flex justify-center items-center order-first lg:order-last"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <img 
-                src={logoVertical} 
-                alt="Seguros Gaete" 
-                className="h-32 sm:h-48 md:h-56 lg:h-72 xl:h-96 w-auto drop-shadow-2xl"
-              />
-            </motion.div>
+          <motion.div className="max-w-2xl" initial={{
+          opacity: 0,
+          y: 30
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6,
+          ease: 'easeOut'
+        }}>
+            <motion.span className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6" initial={{
+            opacity: 0,
+            scale: 0.9
+          }} animate={{
+            opacity: 1,
+            scale: 1
+          }} transition={{
+            delay: 0.2
+          }}>
+              Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
+            </motion.span>
 
-            {/* Text content - Second on mobile/tablet, left on desktop */}
-            <motion.div
-              className="order-last lg:order-first"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-              <motion.span 
-                className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
-              </motion.span>
+            <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
+              Seguros que te acompañan en cada etapa
+            </h1>
 
-              <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
-                Seguros que te acompañan en cada etapa
-              </h1>
+            <p className="text-xl lg:text-2xl text-background/90 mb-8">
+              Asesoría personalizada con las mejores aseguradoras del mercado
+            </p>
 
-              <p className="text-xl lg:text-2xl text-background/90 mb-8">
-                Más de 39 años protegiendo tu tranquilidad. Asesoría personalizada con las mejores aseguradoras del mercado
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="text-base">
-                  <Link to="/seguros/edificio">
-                    Cotiza tu seguro
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Link>
-                </Button>
-                <Button 
-                  asChild 
-                  size="lg" 
-                  className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base"
-                >
-                  <a
-                    href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <MessageCircle className="w-5 h-5 mr-2" />
-                    Hablar por WhatsApp
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              
+              <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
+                <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Hablar por WhatsApp
+                </a>
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -165,33 +108,45 @@ const Index = () => {
       <section className="py-8 bg-primary">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-3 gap-4 lg:gap-8 text-center">
-            <motion.div 
-              className="text-primary-foreground"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
+            <motion.div className="text-primary-foreground" initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: 0.1
+          }}>
               <p className="text-2xl lg:text-4xl font-bold">{COMPANY.clients}</p>
               <p className="text-sm lg:text-base text-primary-foreground/80">Clientes satisfechos</p>
             </motion.div>
-            <motion.div 
-              className="text-primary-foreground"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
+            <motion.div className="text-primary-foreground" initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: 0.2
+          }}>
               <p className="text-2xl lg:text-4xl font-bold">{COMPANY.yearsExperience} años</p>
               <p className="text-sm lg:text-base text-primary-foreground/80">De experiencia</p>
             </motion.div>
-            <motion.div 
-              className="text-primary-foreground"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
+            <motion.div className="text-primary-foreground" initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: 0.3
+          }}>
               <p className="text-2xl lg:text-4xl font-bold">{COMPANY.insurers}</p>
               <p className="text-sm lg:text-base text-primary-foreground/80">Aseguradoras aliadas</p>
             </motion.div>
@@ -212,8 +167,7 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {tranquilidadBenefits.map((item, index) => (
-              <ScrollReveal key={item.highlight} delay={index * 0.05}>
+            {tranquilidadBenefits.map((item, index) => <ScrollReveal key={item.highlight} delay={index * 0.05}>
                 <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift">
                   <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <item.icon className="w-8 h-8 text-primary" />
@@ -226,8 +180,7 @@ const Index = () => {
                     {item.description}
                   </p>
                 </div>
-              </ScrollReveal>
-            ))}
+              </ScrollReveal>)}
           </div>
         </div>
       </section>
@@ -247,16 +200,12 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
             {/* Card 1: Seguro Edificio */}
             <ScrollReveal delay={0.1}>
-              <motion.div
-                className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift"
-                whileHover={{ y: -5 }}
-              >
-                <div 
-                  className="h-48 lg:h-56 bg-cover bg-center"
-                  style={{ 
-                    backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800')` 
-                  }}
-                />
+              <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
+              y: -5
+            }}>
+                <div className="h-48 lg:h-56 bg-cover bg-center" style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800')`
+              }} />
                 <div className="p-6 lg:p-8">
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Building2 className="w-6 h-6 text-primary" />
@@ -280,16 +229,12 @@ const Index = () => {
 
             {/* Card 2: Vida Guardias */}
             <ScrollReveal delay={0.2}>
-              <motion.div
-                className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift"
-                whileHover={{ y: -5 }}
-              >
-                <div 
-                  className="h-48 lg:h-56 bg-cover bg-center"
-                  style={{ 
-                    backgroundImage: `url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&q=80&w=800')` 
-                  }}
-                />
+              <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
+              y: -5
+            }}>
+                <div className="h-48 lg:h-56 bg-cover bg-center" style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&q=80&w=800')`
+              }} />
                 <div className="p-6 lg:p-8">
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                     <Shield className="w-6 h-6 text-primary" />
@@ -327,29 +272,23 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {[
-              {
-                icon: <Award className="w-7 h-7" />,
-                title: "Trayectoria Comprobada",
-                description: "Desde 1987 asesorando a familias y empresas con soluciones de protección a medida"
-              },
-              {
-                icon: <Headphones className="w-7 h-7" />,
-                title: "Asesoría Integral",
-                description: "Te guiamos desde la cotización hasta la resolución de siniestros, siempre disponibles"
-              },
-              {
-                icon: <Network className="w-7 h-7" />,
-                title: "Red de Aseguradoras",
-                description: "Convenios con más de 10 compañías de primer nivel para ofrecerte las mejores opciones"
-              },
-              {
-                icon: <Clock className="w-7 h-7" />,
-                title: "Atención Inmediata",
-                description: "Respuesta en menos de 24 horas y acompañamiento cercano cuando más lo necesitas"
-              }
-            ].map((item, index) => (
-              <ScrollReveal key={item.title} delay={index * 0.1}>
+            {[{
+            icon: <Award className="w-7 h-7" />,
+            title: "Trayectoria Comprobada",
+            description: "Desde 1987 asesorando a familias y empresas con soluciones de protección a medida"
+          }, {
+            icon: <Headphones className="w-7 h-7" />,
+            title: "Asesoría Integral",
+            description: "Te guiamos desde la cotización hasta la resolución de siniestros, siempre disponibles"
+          }, {
+            icon: <Network className="w-7 h-7" />,
+            title: "Red de Aseguradoras",
+            description: "Convenios con más de 10 compañías de primer nivel para ofrecerte las mejores opciones"
+          }, {
+            icon: <Clock className="w-7 h-7" />,
+            title: "Atención Inmediata",
+            description: "Respuesta en menos de 24 horas y acompañamiento cercano cuando más lo necesitas"
+          }].map((item, index) => <ScrollReveal key={item.title} delay={index * 0.1}>
                 <div className="bg-card rounded-xl p-6 text-center hover-lift border border-border">
                   <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
                     {item.icon}
@@ -361,8 +300,7 @@ const Index = () => {
                     {item.description}
                   </p>
                 </div>
-              </ScrollReveal>
-            ))}
+              </ScrollReveal>)}
           </div>
         </div>
       </section>
@@ -380,13 +318,15 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 lg:gap-6">
-            {INSURANCE_PARTNERS.map((partner, index) => (
-              <ScrollReveal key={partner.name} delay={index * 0.03}>
+            {INSURANCE_PARTNERS.map((partner, index) => <ScrollReveal key={partner.name} delay={index * 0.03}>
                 <div className="bg-card rounded-lg p-4 flex items-center justify-center h-20 lg:h-24 hover:shadow-md transition-shadow">
-                  <PartnerLogo name={partner.name} logo={partner.logo} />
+                  <img src={partner.logo} alt={partner.name} className="max-h-12 lg:max-h-14 w-auto object-contain" loading="lazy" onError={e => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                target.parentElement!.innerHTML = `<span class="text-xs text-muted-foreground font-medium text-center">${partner.name}</span>`;
+              }} />
                 </div>
-              </ScrollReveal>
-            ))}
+              </ScrollReveal>)}
           </div>
         </div>
       </section>
@@ -396,12 +336,9 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
             <ScrollReveal>
-              <div 
-                className="h-64 lg:h-96 rounded-2xl bg-cover bg-center shadow-elevated"
-                style={{ 
-                  backgroundImage: `url('https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=800')` 
-                }}
-              />
+              <div className="h-64 lg:h-96 rounded-2xl bg-cover bg-center shadow-elevated" style={{
+              backgroundImage: `url('https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=800')`
+            }} />
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
@@ -446,8 +383,6 @@ const Index = () => {
       <div id="contacto">
         <CTASection />
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
