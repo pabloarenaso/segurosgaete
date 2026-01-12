@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
+import logoVertical from '@/assets/logo-vertical-color.png';
 
 const tranquilidadBenefits = [
   {
@@ -93,52 +94,68 @@ const Index = () => {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            className="max-w-2xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <motion.span 
-              className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6"
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left column - Text */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              <motion.span 
+                className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
+              </motion.span>
+
+              <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
+                Seguros que te acompañan en cada etapa
+              </h1>
+
+              <p className="text-xl lg:text-2xl text-background/90 mb-8">
+                Asesoría personalizada con las mejores aseguradoras del mercado
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="text-base">
+                  <Link to="/seguros/edificio">
+                    Cotiza tu seguro
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
+                </Button>
+                <Button 
+                  asChild 
+                  size="lg" 
+                  className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base"
+                >
+                  <a
+                    href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    Hablar por WhatsApp
+                  </a>
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Right column - Logo */}
+            <motion.div 
+              className="hidden lg:flex justify-center items-center"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
             >
-              Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
-            </motion.span>
-
-            <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
-              Seguros que te acompañan en cada etapa
-            </h1>
-
-            <p className="text-xl lg:text-2xl text-background/90 mb-8">
-              Asesoría personalizada con las mejores aseguradoras del mercado
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="text-base">
-                <Link to="/seguros/edificio">
-                  Cotiza tu seguro
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Link>
-              </Button>
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base"
-              >
-                <a
-                  href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Hablar por WhatsApp
-                </a>
-              </Button>
-            </div>
-          </motion.div>
+              <img 
+                src={logoVertical} 
+                alt="Seguros Gaete" 
+                className="h-72 xl:h-96 w-auto drop-shadow-2xl"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -364,17 +381,21 @@ const Index = () => {
             {INSURANCE_PARTNERS.map((partner, index) => (
               <ScrollReveal key={partner.name} delay={index * 0.03}>
                 <div className="bg-card rounded-lg p-4 flex items-center justify-center h-20 lg:h-24 hover:shadow-md transition-shadow">
-                  <img 
-                    src={partner.logo} 
-                    alt={partner.name}
-                    className="max-h-12 lg:max-h-14 w-auto object-contain"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      target.parentElement!.innerHTML = `<span class="text-xs text-muted-foreground font-medium text-center">${partner.name}</span>`;
-                    }}
-                  />
+                  {partner.logo ? (
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="max-h-12 lg:max-h-14 w-auto object-contain"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.parentElement!.innerHTML = `<span class="text-xs text-muted-foreground font-medium text-center">${partner.name}</span>`;
+                      }}
+                    />
+                  ) : (
+                    <span className="text-xs text-muted-foreground font-medium text-center">{partner.name}</span>
+                  )}
                 </div>
               </ScrollReveal>
             ))}
