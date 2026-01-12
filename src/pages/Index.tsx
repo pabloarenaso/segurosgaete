@@ -6,6 +6,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
+import PartnerLogo from '@/components/shared/PartnerLogo';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
 
 // Componente de contador animado
@@ -359,15 +360,13 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 lg:gap-6">
-            {INSURANCE_PARTNERS.map((partner, index) => <ScrollReveal key={partner.name} delay={index * 0.03}>
+            {INSURANCE_PARTNERS.map((partner, index) => (
+              <ScrollReveal key={partner.name} delay={index * 0.03}>
                 <div className="bg-card rounded-lg p-4 flex items-center justify-center h-20 lg:h-24 hover:shadow-md transition-shadow">
-                  <img src={partner.logo} alt={partner.name} className="max-h-12 lg:max-h-14 w-auto object-contain" loading="lazy" onError={e => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                target.parentElement!.innerHTML = `<span class="text-xs text-muted-foreground font-medium text-center">${partner.name}</span>`;
-              }} />
+                  <PartnerLogo name={partner.name} logo={partner.logo} />
                 </div>
-              </ScrollReveal>)}
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
