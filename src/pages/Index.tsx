@@ -8,13 +8,72 @@ import {
   Clock, 
   Headphones,
   CheckCircle,
-  MessageCircle
+  MessageCircle,
+  DollarSign,
+  Target,
+  Handshake,
+  Trophy,
+  Award,
+  AlertTriangle,
+  Lightbulb,
+  Network
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
+
+const tranquilidadBenefits = [
+  {
+    icon: DollarSign,
+    highlight: "Ahorra dinero",
+    title: "",
+    description: "Nuestra trayectoria nos permite encontrar los mejores productos en relación precio/calidad del mercado."
+  },
+  {
+    icon: Target,
+    highlight: "Centraliza",
+    title: " tus seguros",
+    description: "Administramos todos tus seguros en un solo lugar para que no tengas que preocuparte de nada más."
+  },
+  {
+    icon: Handshake,
+    highlight: "Confía",
+    title: " en nosotros",
+    description: "Establecemos relaciones cercanas y duraderas con cada cliente, brindando atención personalizada."
+  },
+  {
+    icon: Trophy,
+    highlight: "Elige",
+    title: " lo mejor",
+    description: "Te ofrecemos los mejores productos del mercado en términos de coberturas, precios y respaldo."
+  },
+  {
+    icon: Award,
+    highlight: "35 años",
+    title: " de experiencia",
+    description: "Más de tres décadas asesorando a personas y empresas en la protección de su patrimonio."
+  },
+  {
+    icon: AlertTriangle,
+    highlight: "No pagues en vano,",
+    title: " Asegúrate bien",
+    description: "El seguro más barato no necesariamente es el que te va a proteger mejor cuando lo necesites."
+  },
+  {
+    icon: Network,
+    highlight: "Miembros de ANS",
+    title: "",
+    description: "Somos parte de la Alianza de Negocios en Seguros, la red de corredores más grande de Chile."
+  },
+  {
+    icon: Lightbulb,
+    highlight: "Solucionamos",
+    title: " tus problemas",
+    description: "Nos encargamos de todos los trámites ante las aseguradoras en caso de siniestro."
+  },
+];
 
 const Index = () => {
   return (
@@ -66,9 +125,8 @@ const Index = () => {
               </Button>
               <Button 
                 asChild 
-                variant="outline" 
                 size="lg" 
-                className="border-background text-background hover:bg-background hover:text-foreground text-base"
+                className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base"
               >
                 <a
                   href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
@@ -122,8 +180,41 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Tu tranquilidad está aquí - NEW SECTION */}
+      <section id="nosotros" className="py-16 lg:py-24 bg-secondary">
+        <div className="container mx-auto px-4">
+          <ScrollReveal className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Tu tranquilidad está aquí, en <span className="text-primary">Seguros Gaete</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Conoce las razones por las que miles de clientes confían en nosotros
+            </p>
+          </ScrollReveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {tranquilidadBenefits.map((item, index) => (
+              <ScrollReveal key={item.highlight} delay={index * 0.05}>
+                <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift">
+                  <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <item.icon className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold text-center mb-2">
+                    <span className="text-primary">{item.highlight}</span>
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground text-center">
+                    {item.description}
+                  </p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Nuestros Seguros */}
-      <section className="py-16 lg:py-24 bg-secondary">
+      <section id="servicios" className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <ScrollReveal className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -205,7 +296,7 @@ const Index = () => {
       </section>
 
       {/* ¿Por qué Seguros Gaete? */}
-      <section className="py-16 lg:py-24">
+      <section className="py-16 lg:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <ScrollReveal className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -219,29 +310,29 @@ const Index = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
               {
-                icon: <Shield className="w-6 h-6" />,
-                title: "Confianza y Experiencia",
-                description: "Más de 35 años asesorando a empresas y personas"
+                icon: <Award className="w-7 h-7" />,
+                title: "Trayectoria Comprobada",
+                description: "Desde 1987 asesorando a familias y empresas con soluciones de protección a medida"
               },
               {
-                icon: <Headphones className="w-6 h-6" />,
-                title: "Asesoría Personalizada",
-                description: "Te acompañamos en todo el proceso, desde cotización hasta siniestro"
+                icon: <Headphones className="w-7 h-7" />,
+                title: "Asesoría Integral",
+                description: "Te guiamos desde la cotización hasta la resolución de siniestros, siempre disponibles"
               },
               {
-                icon: <Users className="w-6 h-6" />,
-                title: "Amplia Red",
-                description: "Trabajamos con +10 compañías aseguradoras de primer nivel"
+                icon: <Network className="w-7 h-7" />,
+                title: "Red de Aseguradoras",
+                description: "Convenios con más de 10 compañías de primer nivel para ofrecerte las mejores opciones"
               },
               {
-                icon: <Clock className="w-6 h-6" />,
-                title: "Respuesta Rápida",
-                description: "Atención ágil y cercana cuando más nos necesitas"
+                icon: <Clock className="w-7 h-7" />,
+                title: "Atención Inmediata",
+                description: "Respuesta en menos de 24 horas y acompañamiento cercano cuando más lo necesitas"
               }
             ].map((item, index) => (
               <ScrollReveal key={item.title} delay={index * 0.1}>
                 <div className="bg-card rounded-xl p-6 text-center hover-lift border border-border">
-                  <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary">
+                  <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
                     {item.icon}
                   </div>
                   <h3 className="text-lg font-bold text-card-foreground mb-2">
@@ -278,6 +369,11 @@ const Index = () => {
                     alt={partner.name}
                     className="max-h-12 lg:max-h-14 w-auto object-contain"
                     loading="lazy"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      target.parentElement!.innerHTML = `<span class="text-xs text-muted-foreground font-medium text-center">${partner.name}</span>`;
+                    }}
                   />
                 </div>
               </ScrollReveal>
@@ -287,7 +383,7 @@ const Index = () => {
       </section>
 
       {/* Nuestro Compromiso */}
-      <section className="py-16 lg:py-24">
+      <section id="compromiso" className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
             <ScrollReveal>
@@ -338,7 +434,9 @@ const Index = () => {
       </section>
 
       {/* CTA Final */}
-      <CTASection />
+      <div id="contacto">
+        <CTASection />
+      </div>
     </Layout>
   );
 };
