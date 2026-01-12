@@ -210,7 +210,7 @@ const SeguroEdificio = () => {
                     <h3 className="text-lg font-semibold mb-4">¿Qué tipo de cobertura necesitas?</h3>
                     <div className="space-y-3">
                       {coverageOptions.map((option) => (
-                        <label key={option.value} className={`relative flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all ${coverage === option.value ? 'border-primary bg-primary/5 shadow-lg' : 'border-border hover:border-primary/50'}`}>
+                        <label key={option.value} className={`relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${coverage === option.value ? 'border-primary bg-primary/5 shadow-lg' : 'border-border hover:border-primary/50'}`}>
                           <input type="radio" value={option.value} {...register('coverage')} className="sr-only" />
                           <div className="flex-1">
                             {'recommended' in option && option.recommended && <span className="text-xs font-semibold text-primary mb-1 block">✓ Recomendada</span>}
