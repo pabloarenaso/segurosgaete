@@ -96,8 +96,23 @@ const Index = () => {
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left column - Text */}
+            {/* Logo - First on mobile/tablet, right on desktop */}
+            <motion.div 
+              className="flex justify-center items-center order-first lg:order-last"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <img 
+                src={logoVertical} 
+                alt="Seguros Gaete" 
+                className="h-32 sm:h-48 md:h-56 lg:h-72 xl:h-96 w-auto drop-shadow-2xl"
+              />
+            </motion.div>
+
+            {/* Text content - Second on mobile/tablet, left on desktop */}
             <motion.div
+              className="order-last lg:order-first"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -141,20 +156,6 @@ const Index = () => {
                   </a>
                 </Button>
               </div>
-            </motion.div>
-
-            {/* Right column - Logo - Visible on all screen sizes */}
-            <motion.div 
-              className="flex justify-center items-center mt-8 lg:mt-0"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <img 
-                src={logoVertical} 
-                alt="Seguros Gaete" 
-                className="h-32 sm:h-48 md:h-56 lg:h-72 xl:h-96 w-auto drop-shadow-2xl"
-              />
             </motion.div>
           </div>
         </div>
