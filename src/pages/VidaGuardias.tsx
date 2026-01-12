@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import { vidaGuardiasSchema, type VidaGuardiasForm } from '@/lib/validations';
+import logoBlanco from '@/assets/logo-vertical-blanco.png';
 
 const coverageOptions = [
   { value: 'basico', label: 'BÁSICO DS-93', description: 'Cobertura mínima legal', price: 'Desde UF 0.5/mes', icon: Shield },
@@ -76,39 +77,68 @@ const VidaGuardias = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/75" />
         </div>
         
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <motion.span 
-            className="inline-flex items-center gap-2 px-4 py-2 bg-background/20 backdrop-blur-sm rounded-full text-primary-foreground text-sm mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Shield className="w-4 h-4" /> Cobertura legal requerida
-          </motion.span>
-          <motion.h1 
-            className="text-3xl lg:text-5xl font-bold text-primary-foreground mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            Seguro de Vida para Guardias (DS-93)
-          </motion.h1>
-          <motion.p 
-            className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            Cumple la normativa legal obligatoria del Decreto Supremo 93
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Button size="lg" className="bg-background text-primary hover:bg-background/90" onClick={() => document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })}>
-              Cotizar ahora <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </motion.div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            {/* Left - Content */}
+            <div className="text-center lg:text-left">
+              {/* Brand Badge */}
+              <motion.div 
+                className="flex items-center justify-center lg:justify-start gap-3 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <img src={logoBlanco} alt="Seguros Gaete" className="h-12 lg:h-16 w-auto" />
+              </motion.div>
+              
+              <motion.span 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-background/20 backdrop-blur-sm rounded-full text-primary-foreground text-sm mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Shield className="w-4 h-4" /> Cobertura legal requerida
+              </motion.span>
+              <motion.h1 
+                className="text-3xl lg:text-5xl font-bold text-primary-foreground mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                Seguro de Vida para Guardias (DS-93)
+              </motion.h1>
+              <motion.p 
+                className="text-xl text-primary-foreground/90 mb-8 max-w-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                Cumple la normativa legal obligatoria del Decreto Supremo 93
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Button size="lg" className="bg-background text-primary hover:bg-background/90" onClick={() => document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })}>
+                  Cotizar ahora <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Right - Large Logo (hidden on mobile) */}
+            <motion.div 
+              className="hidden lg:flex justify-center items-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <img 
+                src={logoBlanco} 
+                alt="Seguros Gaete" 
+                className="h-64 xl:h-80 w-auto drop-shadow-2xl opacity-90"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 

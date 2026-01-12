@@ -51,9 +51,8 @@ const CTASection = ({
             {showWhatsApp && (
               <Button
                 asChild
-                variant="outline"
                 size="lg"
-                className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto"
+                className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] w-full sm:w-auto"
               >
                 <a
                   href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
