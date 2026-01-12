@@ -12,7 +12,7 @@ import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
@@ -319,10 +319,16 @@ const VidaGuardias = () => {
                       <div className="flex items-center gap-2"><Building className="w-4 h-4 text-primary" /><span>{watch('companyName') || 'Empresa no ingresada'}</span></div>
                       <div className="flex items-center gap-2"><Users className="w-4 h-4 text-primary" /><span>{watch('guardiasCount') || '0'} guardias</span></div>
                     </div>
-                    <div className="flex items-start gap-3 mb-6">
-                      <Checkbox id="terms" checked={watch('termsAccepted')} onCheckedChange={(checked) => setValue('termsAccepted', checked as boolean)} />
-                      <Label htmlFor="terms" className="text-sm leading-relaxed">Acepto los términos y condiciones y la política de privacidad</Label>
-                    </div>
+                    <label 
+                      htmlFor="terms" 
+                      className="flex items-center gap-3 mb-6 cursor-pointer group"
+                      onClick={() => setValue('termsAccepted', !watch('termsAccepted'))}
+                    >
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${watch('termsAccepted') ? 'bg-whatsapp border-whatsapp' : 'border-muted-foreground/50 group-hover:border-primary'}`}>
+                        {watch('termsAccepted') && <Check className="w-4 h-4 text-white" />}
+                      </div>
+                      <span className="text-sm leading-relaxed">Acepto los términos y condiciones y la política de privacidad</span>
+                    </label>
                     {errors.termsAccepted && <p className="text-destructive text-sm mb-4">{errors.termsAccepted.message}</p>}
                     <div className="flex gap-3">
                       <Button type="button" variant="outline" onClick={prevStep} className="flex-1"><ArrowLeft className="w-4 h-4 mr-2" /> Volver</Button>
