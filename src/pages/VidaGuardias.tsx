@@ -211,24 +211,23 @@ const VidaGuardias = () => {
                     <h3 className="text-lg font-semibold mb-4">¿Qué tipo de cobertura necesitas?</h3>
                     <div className="space-y-3">
                       {coverageOptions.map((option) => (
-                        <label key={option.value} className={`relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${coverage === option.value ? 'border-primary bg-primary/5 shadow-lg' : 'border-border hover:border-primary/50'}`}>
+                        <label key={option.value} className={`relative flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all ${coverage === option.value ? 'border-primary bg-primary/5 shadow-lg' : 'border-border hover:border-primary/50'}`}>
                           <input type="radio" value={option.value} {...register('coverage')} className="sr-only" />
                           <div className="flex-1">
                             {'recommended' in option && option.recommended && <span className="text-xs font-semibold text-primary mb-1 block">✓ Recomendada</span>}
                             <p className="font-bold">{option.label}</p>
-                            <p className="text-sm text-muted-foreground">{option.description}</p>
-                            <div className="flex items-center justify-between mt-1">
-                              <p className="text-sm font-medium text-primary">{option.price}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm text-muted-foreground">{option.description}</p>
                               {coverage === option.value && (
                                 <Dialog>
                                   <DialogTrigger asChild>
                                     <button 
                                       type="button"
                                       onClick={(e) => e.stopPropagation()}
-                                      className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors underline underline-offset-2"
+                                      className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors underline underline-offset-2 whitespace-nowrap"
                                       aria-label={`Ver detalles del plan ${option.label}`}
                                     >
-                                      <HelpCircle className="w-4 h-4" />
+                                      <HelpCircle className="w-3.5 h-3.5" />
                                       Ver detalles
                                     </button>
                                   </DialogTrigger>
@@ -269,8 +268,13 @@ const VidaGuardias = () => {
                                 </Dialog>
                               )}
                             </div>
+                            <p className="text-sm font-medium text-primary mt-1">{option.price}</p>
                           </div>
-                          {coverage === option.value && <Check className="w-5 h-5 text-primary ml-2" />}
+                          {coverage === option.value && (
+                            <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center ml-3 shrink-0">
+                              <Check className="w-4 h-4 text-white" />
+                            </div>
+                          )}
                         </label>
                       ))}
                     </div>
