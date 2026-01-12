@@ -215,59 +215,62 @@ const VidaGuardias = () => {
                           <input type="radio" value={option.value} {...register('coverage')} className="sr-only" />
                           <div className="flex-1">
                             {'recommended' in option && option.recommended && <span className="text-xs font-semibold text-primary mb-1 block">✓ Recomendada</span>}
-                            <div className="flex items-center gap-2">
-                              <p className="font-bold">{option.label}</p>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <button 
-                                    type="button"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="w-5 h-5 rounded-full bg-muted hover:bg-primary/20 flex items-center justify-center transition-colors"
-                                    aria-label={`Ver detalles del plan ${option.label}`}
-                                  >
-                                    <HelpCircle className="w-3.5 h-3.5 text-muted-foreground" />
-                                  </button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-md">
-                                  <DialogHeader>
-                                    <DialogTitle className="flex items-center gap-2">
-                                      <Shield className="w-5 h-5 text-primary" />
-                                      {option.label}
-                                    </DialogTitle>
-                                  </DialogHeader>
-                                  <div className="space-y-4">
-                                    <div>
-                                      <h4 className="font-semibold mb-2 text-sm">Coberturas incluidas:</h4>
-                                      <ul className="space-y-1.5">
-                                        {option.details.coberturas.map((cobertura, i) => (
-                                          <li key={i} className="flex items-start gap-2 text-sm">
-                                            <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                                            <span>{cobertura}</span>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                    {'montos' in option.details && option.details.montos && (
-                                      <div>
-                                        <h4 className="font-semibold mb-1 text-sm">Montos:</h4>
-                                        <p className="text-sm text-muted-foreground">{option.details.montos}</p>
-                                      </div>
-                                    )}
-                                    <div>
-                                      <h4 className="font-semibold mb-1 text-sm">Ideal para:</h4>
-                                      <p className="text-sm text-muted-foreground">{option.details.ideal}</p>
-                                    </div>
-                                    <div className="pt-2 border-t">
-                                      <p className="text-base font-semibold text-primary">{option.price}</p>
-                                    </div>
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
+                            <p className="font-bold">{option.label}</p>
                             <p className="text-sm text-muted-foreground">{option.description}</p>
-                            <p className="text-sm font-medium text-primary mt-1">{option.price}</p>
+                            <div className="flex items-center justify-between mt-1">
+                              <p className="text-sm font-medium text-primary">{option.price}</p>
+                              {coverage === option.value && (
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <button 
+                                      type="button"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors underline underline-offset-2"
+                                      aria-label={`Ver detalles del plan ${option.label}`}
+                                    >
+                                      <HelpCircle className="w-4 h-4" />
+                                      Ver detalles
+                                    </button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-md">
+                                    <DialogHeader>
+                                      <DialogTitle className="flex items-center gap-2">
+                                        <Shield className="w-5 h-5 text-primary" />
+                                        {option.label}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    <div className="space-y-4">
+                                      <div>
+                                        <h4 className="font-semibold mb-2 text-sm">Coberturas incluidas:</h4>
+                                        <ul className="space-y-1.5">
+                                          {option.details.coberturas.map((cobertura, i) => (
+                                            <li key={i} className="flex items-start gap-2 text-sm">
+                                              <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                                              <span>{cobertura}</span>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                      {'montos' in option.details && option.details.montos && (
+                                        <div>
+                                          <h4 className="font-semibold mb-1 text-sm">Montos:</h4>
+                                          <p className="text-sm text-muted-foreground">{option.details.montos}</p>
+                                        </div>
+                                      )}
+                                      <div>
+                                        <h4 className="font-semibold mb-1 text-sm">Ideal para:</h4>
+                                        <p className="text-sm text-muted-foreground">{option.details.ideal}</p>
+                                      </div>
+                                      <div className="pt-2 border-t">
+                                        <p className="text-base font-semibold text-primary">{option.price}</p>
+                                      </div>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              )}
+                            </div>
                           </div>
-                          {coverage === option.value && <Check className="w-5 h-5 text-primary" />}
+                          {coverage === option.value && <Check className="w-5 h-5 text-primary ml-2" />}
                         </label>
                       ))}
                     </div>
