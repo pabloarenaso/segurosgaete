@@ -8,7 +8,7 @@ import logo from '@/assets/logo.png';
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -21,11 +21,18 @@ const Header = () => {
 
   useEffect(() => {
     setIsOpen(false);
-    setSubmenuOpen(false);
+    setOpenSubmenu(null);
   }, [location]);
 
   const menuItems = [
     { name: 'Inicio', path: '/' },
+    { 
+      name: 'Nosotros', 
+      submenu: [
+        { name: 'Quiénes Somos', path: '/#nosotros' },
+        { name: 'Nuestro Compromiso', path: '/#compromiso' },
+      ]
+    },
     { 
       name: 'Seguros', 
       submenu: [
@@ -33,7 +40,19 @@ const Header = () => {
         { name: 'Vida Guardias DS-93', path: '/seguros/guardias' },
       ]
     },
+    { 
+      name: 'Servicios', 
+      submenu: [
+        { name: 'Asesoría Personalizada', path: '/#servicios' },
+        { name: 'Gestión de Siniestros', path: '/#servicios' },
+      ]
+    },
+    { name: 'Contacto', path: '/#contacto' },
   ];
+
+  const handleSubmenuToggle = (menuName: string) => {
+    setOpenSubmenu(openSubmenu === menuName ? null : menuName);
+  };
 
   return (
     <>
@@ -46,22 +65,22 @@ const Header = () => {
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="container mx-auto px-4">
-          <nav className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
+          <nav className="flex items-center justify-between h-20 lg:h-24">
+            {/* Logo - Bigger size */}
             <Link to="/" className="flex-shrink-0">
               <img 
                 src={logo} 
                 alt="Seguros Gaete" 
-                className="h-10 lg:h-12 w-auto"
+                className="h-14 lg:h-20 w-auto"
               />
             </Link>
 
             {/* Desktop Menu */}
-            <div className="hidden lg:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-6">
               {menuItems.map((item) => (
                 item.submenu ? (
                   <div key={item.name} className="relative group">
-                    <button className="flex items-center gap-1 text-foreground hover:text-primary transition-colors font-medium">
+                    <button className="flex items-center gap-1 text-foreground hover:text-primary transition-colors font-medium py-2">
                       {item.name}
                       <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                     </button>
@@ -69,7 +88,7 @@ const Header = () => {
                       <div className="bg-card rounded-lg shadow-elevated border border-border py-2 min-w-[220px]">
                         {item.submenu.map((subItem) => (
                           <Link
-                            key={subItem.path}
+                            key={subItem.path + subItem.name}
                             to={subItem.path}
                             className="block px-4 py-3 text-foreground hover:bg-primary/5 hover:text-primary transition-colors"
                           >
@@ -91,7 +110,7 @@ const Header = () => {
               ))}
 
               {/* CTA Buttons */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 ml-4">
                 <a
                   href={`tel:${CONTACT.phones[0].replace(/\s/g, '')}`}
                   className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
@@ -103,7 +122,7 @@ const Header = () => {
                   href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                  className="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-lg hover:bg-[#20BD5A] transition-colors font-medium"
                 >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
@@ -139,13 +158,13 @@ const Header = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-0 right-0 bottom-0 w-[280px] bg-background z-50 lg:hidden shadow-2xl"
+              className="fixed top-0 right-0 bottom-0 w-[300px] bg-background z-50 lg:hidden shadow-2xl"
               style={{ paddingTop: 'env(safe-area-inset-top)' }}
             >
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between p-4 border-b border-border">
-                  <img src={logo} alt="Seguros Gaete" className="h-8" />
+                  <img src={logo} alt="Seguros Gaete" className="h-10" />
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 text-foreground hover:text-primary"
@@ -157,19 +176,19 @@ const Header = () => {
 
                 {/* Mobile Navigation */}
                 <nav className="flex-1 overflow-y-auto p-4">
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {menuItems.map((item) => (
                       item.submenu ? (
                         <div key={item.name}>
                           <button
-                            onClick={() => setSubmenuOpen(!submenuOpen)}
+                            onClick={() => handleSubmenuToggle(item.name)}
                             className="flex items-center justify-between w-full py-3 px-4 text-foreground hover:bg-primary/5 rounded-lg transition-colors font-medium"
                           >
                             {item.name}
-                            <ChevronDown className={`w-4 h-4 transition-transform ${submenuOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`w-4 h-4 transition-transform ${openSubmenu === item.name ? 'rotate-180' : ''}`} />
                           </button>
                           <AnimatePresence>
-                            {submenuOpen && (
+                            {openSubmenu === item.name && (
                               <motion.div
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
@@ -178,7 +197,7 @@ const Header = () => {
                               >
                                 {item.submenu.map((subItem) => (
                                   <Link
-                                    key={subItem.path}
+                                    key={subItem.path + subItem.name}
                                     to={subItem.path}
                                     className="block py-3 px-4 text-muted-foreground hover:text-primary transition-colors"
                                   >
@@ -208,14 +227,14 @@ const Header = () => {
                     href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white py-3 rounded-lg font-medium"
+                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white py-3 rounded-lg font-medium hover:bg-[#20BD5A] transition-colors"
                   >
                     <MessageCircle className="w-5 h-5" />
                     WhatsApp
                   </a>
                   <a
                     href={`tel:${CONTACT.phones[0].replace(/\s/g, '')}`}
-                    className="flex items-center justify-center gap-2 w-full border border-primary text-primary py-3 rounded-lg font-medium"
+                    className="flex items-center justify-center gap-2 w-full border border-primary text-primary py-3 rounded-lg font-medium hover:bg-primary/5 transition-colors"
                   >
                     <Phone className="w-5 h-5" />
                     {CONTACT.phones[0]}
@@ -228,7 +247,7 @@ const Header = () => {
       </AnimatePresence>
 
       {/* Spacer for fixed header */}
-      <div className="h-16 lg:h-20" />
+      <div className="h-20 lg:h-24" />
     </>
   );
 };

@@ -4,9 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { 
-  ArrowRight, ArrowLeft, Building2, Flame, Droplets, Users, Lock, 
-  Settings, Square, Check, User, Mail, Phone, MapPin, Home,
-  FileText, Clock, Shield, ChevronDown, CheckCircle
+  ArrowRight, ArrowLeft, Building2, Flame, Droplets, Scale, ShieldCheck, 
+  Cog, PanelTop, Check, Mail, Phone, Shield, ChevronDown
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -24,12 +23,12 @@ const coverageOptions = [
 ] as const;
 
 const benefits = [
-  { icon: Flame, title: "Incendio y Terremoto", description: "Protección contra desastres naturales y siniestros" },
-  { icon: Droplets, title: "Daños por Agua", description: "Filtraciones, roturas de cañerías y daños por humedad" },
-  { icon: Users, title: "Responsabilidad Civil", description: "Cubre accidentes a terceros en áreas comunes" },
-  { icon: Lock, title: "Robo Especies Comunes", description: "Protege bienes en áreas comunes del edificio" },
-  { icon: Settings, title: "Equipos y Maquinarias", description: "Ascensores, bombas de agua, generadores" },
-  { icon: Square, title: "Vidrios y Cristales", description: "Reposición de ventanas, puertas y mamparas" },
+  { icon: Flame, title: "Incendio y Terremoto", description: "Cobertura ante siniestros mayores incluyendo daños estructurales y contenido común del edificio" },
+  { icon: Droplets, title: "Daños por Agua", description: "Incluye filtraciones en techos, roturas de matrices y daños a terceros por humedad" },
+  { icon: Scale, title: "Responsabilidad Civil", description: "Protección legal si un tercero sufre un accidente en las áreas comunes del edificio" },
+  { icon: ShieldCheck, title: "Robo Especies Comunes", description: "Cubre hurto de equipamiento, mobiliario y bienes ubicados en espacios compartidos" },
+  { icon: Cog, title: "Equipos y Maquinarias", description: "Ascensores, calderas, bombas de agua y generadores eléctricos asegurados" },
+  { icon: PanelTop, title: "Vidrios y Cristales", description: "Reposición de ventanales, mamparas, espejos y puertas de cristal dañadas" },
 ];
 
 const faqs = [
@@ -62,22 +61,53 @@ const SeguroEdificio = () => {
 
   return (
     <Layout>
-      {/* Hero */}
+      {/* Hero with Background Image */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-primary" />
+        {/* Background Image with Blur */}
+        <div className="absolute inset-0">
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ 
+              backgroundImage: `url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1920')`,
+              filter: 'blur(2px)'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/75" />
+        </div>
+        
         <div className="container mx-auto px-4 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-background/20 rounded-full text-primary-foreground text-sm mb-6">
+          <motion.span 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-background/20 backdrop-blur-sm rounded-full text-primary-foreground text-sm mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
             <Building2 className="w-4 h-4" /> Cobertura personalizada
-          </span>
-          <h1 className="text-3xl lg:text-5xl font-bold text-primary-foreground mb-4">
+          </motion.span>
+          <motion.h1 
+            className="text-3xl lg:text-5xl font-bold text-primary-foreground mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
             Seguro para Edificios y Condominios
-          </h1>
-          <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p 
+            className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
             Protección integral para espacios comunes y unidades
-          </p>
-          <Button size="lg" className="bg-background text-primary hover:bg-background/90" onClick={() => document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })}>
-            Cotizar ahora <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Button size="lg" className="bg-background text-primary hover:bg-background/90" onClick={() => document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' })}>
+              Cotizar ahora <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </motion.div>
         </div>
       </section>
 
@@ -177,10 +207,10 @@ const SeguroEdificio = () => {
             {benefits.map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 0.1}>
                 <div className="bg-card rounded-xl p-6 border border-border hover-lift">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <item.icon className="w-6 h-6 text-primary" />
+                  <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mb-4">
+                    <item.icon className="w-7 h-7 text-primary" />
                   </div>
-                  <h3 className="font-bold mb-2">{item.title}</h3>
+                  <h3 className="font-bold text-lg mb-2">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
               </ScrollReveal>
