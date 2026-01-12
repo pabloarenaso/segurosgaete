@@ -65,13 +65,13 @@ const Header = () => {
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="container mx-auto px-4">
-          <nav className="flex items-center justify-between h-24 lg:h-28">
-            {/* Logo - Much Bigger size */}
+          <nav className="flex items-center justify-between h-20 lg:h-24">
+            {/* Logo */}
             <Link to="/" className="flex-shrink-0">
               <img 
                 src={logo} 
                 alt="Seguros Gaete" 
-                className="h-16 lg:h-24 w-auto"
+                className="h-14 lg:h-20 w-auto"
               />
             </Link>
 
@@ -164,7 +164,7 @@ const Header = () => {
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between p-4 border-b border-border">
-                  <img src={logo} alt="Seguros Gaete" className="h-14" />
+                  <img src={logo} alt="Seguros Gaete" className="h-12" />
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 text-foreground hover:text-primary"
@@ -247,7 +247,7 @@ const Header = () => {
       </AnimatePresence>
 
       {/* Spacer for fixed header */}
-      <div className="h-24 lg:h-28" />
+      <div className="h-20 lg:h-24" />
     </>
   );
 };

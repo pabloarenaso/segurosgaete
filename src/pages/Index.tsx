@@ -143,9 +143,9 @@ const Index = () => {
               </div>
             </motion.div>
 
-            {/* Right column - Logo */}
+            {/* Right column - Logo - Visible on all screen sizes */}
             <motion.div 
-              className="hidden lg:flex justify-center items-center"
+              className="flex justify-center items-center mt-8 lg:mt-0"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -153,7 +153,7 @@ const Index = () => {
               <img 
                 src={logoVertical} 
                 alt="Seguros Gaete" 
-                className="h-72 xl:h-96 w-auto drop-shadow-2xl"
+                className="h-32 sm:h-48 md:h-56 lg:h-72 xl:h-96 w-auto drop-shadow-2xl"
               />
             </motion.div>
           </div>
