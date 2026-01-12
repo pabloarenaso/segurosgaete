@@ -1,11 +1,42 @@
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
+
+// Componente de contador animado
+const AnimatedCounter = ({ end, suffix = "" }: { end: number; suffix?: string }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (isInView) {
+      const duration = 2000;
+      const steps = 60;
+      const increment = end / steps;
+      let current = 0;
+      
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= end) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(current));
+        }
+      }, duration / steps);
+
+      return () => clearInterval(timer);
+    }
+  }, [isInView, end]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+};
 const tranquilidadBenefits = [{
   icon: DollarSign,
   highlight: "Ahorra dinero",
@@ -264,7 +295,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <ScrollReveal className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              {COMPANY.yearsExperience} años de experiencia nos respaldan
+              <AnimatedCounter end={COMPANY.yearsExperience} suffix="+" /> años de experiencia nos respaldan
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Características que nos distinguen en el mercado asegurador
@@ -275,30 +306,40 @@ const Index = () => {
             {[{
             icon: <Award className="w-7 h-7" />,
             title: "Trayectoria Comprobada",
-            description: "Desde 1987 asesorando a familias y empresas con soluciones de protección a medida"
+            description: "Desde 1987 asesorando a familias y empresas con soluciones de protección a medida",
+            image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=600"
           }, {
             icon: <Headphones className="w-7 h-7" />,
             title: "Asesoría Integral",
-            description: "Te guiamos desde la cotización hasta la resolución de siniestros, siempre disponibles"
+            description: "Te guiamos desde la cotización hasta la resolución de siniestros, siempre disponibles",
+            image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=600"
           }, {
             icon: <Network className="w-7 h-7" />,
             title: "Red de Aseguradoras",
-            description: "Convenios con más de 10 compañías de primer nivel para ofrecerte las mejores opciones"
+            description: "Convenios con más de 10 compañías de primer nivel para ofrecerte las mejores opciones",
+            image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=600"
           }, {
             icon: <Clock className="w-7 h-7" />,
             title: "Atención Inmediata",
-            description: "Respuesta en menos de 24 horas y acompañamiento cercano cuando más lo necesitas"
+            description: "Respuesta en menos de 24 horas y acompañamiento cercano cuando más lo necesitas",
+            image: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=600"
           }].map((item, index) => <ScrollReveal key={item.title} delay={index * 0.1}>
-                <div className="bg-card rounded-xl p-6 text-center hover-lift border border-border">
-                  <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-                    {item.icon}
+                <div className="bg-card rounded-xl overflow-hidden hover-lift border border-border">
+                  <div 
+                    className="h-32 bg-cover bg-center"
+                    style={{ backgroundImage: `url('${item.image}')` }}
+                  />
+                  <div className="p-6 text-center relative">
+                    <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto -mt-12 mb-3 text-primary border-4 border-card">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-lg font-bold text-card-foreground mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {item.description}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-bold text-card-foreground mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {item.description}
-                  </p>
                 </div>
               </ScrollReveal>)}
           </div>
