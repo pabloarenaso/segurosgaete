@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { 
   ArrowRight, ArrowLeft, Building2, Flame, Droplets, Scale, ShieldCheck, 
-  Cog, PanelTop, Check, Mail, Phone, Shield, ChevronDown
+  Cog, PanelTop, Check, Mail, Phone, Shield, ChevronDown, HelpCircle
 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,9 +19,58 @@ import { seguroEdificioSchema, type SeguroEdificioForm } from '@/lib/validations
 import logoBlanco from '@/assets/logo-vertical-blanco.png';
 
 const coverageOptions = [
-  { value: 'basica', label: 'BÁSICA', description: 'Cobertura esencial para espacios comunes', price: 'Desde UF 2/mes', icon: Shield },
-  { value: 'intermedia', label: 'INTERMEDIA', description: 'La más completa para edificios residenciales', price: 'Desde UF 4/mes', icon: Shield, recommended: true },
-  { value: 'premium', label: 'PREMIUM', description: 'Todo riesgo para máxima tranquilidad', price: 'Desde UF 7/mes', icon: Shield },
+  { 
+    value: 'basica', 
+    label: 'BÁSICA', 
+    description: 'Cobertura esencial para espacios comunes', 
+    price: 'Desde UF 2/mes', 
+    icon: Shield,
+    details: {
+      coberturas: [
+        'Incendio y rayo',
+        'Terremoto (cobertura básica)',
+        'Responsabilidad civil limitada (hasta 500 UF)'
+      ],
+      ideal: 'Edificios pequeños con bajo riesgo y presupuesto ajustado'
+    }
+  },
+  { 
+    value: 'intermedia', 
+    label: 'INTERMEDIA', 
+    description: 'La más completa para edificios residenciales', 
+    price: 'Desde UF 4/mes', 
+    icon: Shield, 
+    recommended: true,
+    details: {
+      coberturas: [
+        'Todo lo del plan Básica',
+        'Daños por agua y filtraciones',
+        'Robo de especies comunes',
+        'Equipos y maquinarias (ascensores, calderas)',
+        'Vidrios y cristales',
+        'Responsabilidad civil ampliada (hasta 2.000 UF)'
+      ],
+      ideal: 'Edificios residenciales que buscan protección integral'
+    }
+  },
+  { 
+    value: 'premium', 
+    label: 'PREMIUM', 
+    description: 'Todo riesgo para máxima tranquilidad', 
+    price: 'Desde UF 7/mes', 
+    icon: Shield,
+    details: {
+      coberturas: [
+        'Todo lo del plan Intermedia',
+        'Cobertura todo riesgo',
+        'Lucro cesante por siniestro',
+        'Gastos de remoción de escombros',
+        'Pérdida de arriendos',
+        'Responsabilidad civil ilimitada'
+      ],
+      ideal: 'Edificios de alto valor o comunidades exigentes'
+    }
+  },
 ] as const;
 
 const benefits = [
@@ -164,7 +214,49 @@ const SeguroEdificio = () => {
                           <input type="radio" value={option.value} {...register('coverage')} className="sr-only" />
                           <div className="flex-1">
                             {'recommended' in option && option.recommended && <span className="text-xs font-semibold text-primary mb-1 block">✓ Recomendada</span>}
-                            <p className="font-bold">{option.label}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-bold">{option.label}</p>
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button 
+                                    type="button"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-5 h-5 rounded-full bg-muted hover:bg-primary/20 flex items-center justify-center transition-colors"
+                                    aria-label={`Ver detalles del plan ${option.label}`}
+                                  >
+                                    <HelpCircle className="w-3.5 h-3.5 text-muted-foreground" />
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-md">
+                                  <DialogHeader>
+                                    <DialogTitle className="flex items-center gap-2">
+                                      <Shield className="w-5 h-5 text-primary" />
+                                      {option.label}
+                                    </DialogTitle>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <div>
+                                      <h4 className="font-semibold mb-2 text-sm">Coberturas incluidas:</h4>
+                                      <ul className="space-y-1.5">
+                                        {option.details.coberturas.map((cobertura, i) => (
+                                          <li key={i} className="flex items-start gap-2 text-sm">
+                                            <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                                            <span>{cobertura}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                    <div>
+                                      <h4 className="font-semibold mb-1 text-sm">Ideal para:</h4>
+                                      <p className="text-sm text-muted-foreground">{option.details.ideal}</p>
+                                    </div>
+                                    <div className="pt-2 border-t">
+                                      <p className="text-base font-semibold text-primary">{option.price}</p>
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                            </div>
                             <p className="text-sm text-muted-foreground">{option.description}</p>
                             <p className="text-sm font-medium text-primary mt-1">{option.price}</p>
                           </div>

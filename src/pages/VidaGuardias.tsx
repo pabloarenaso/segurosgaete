@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { 
   ArrowRight, ArrowLeft, Shield, HeartPulse, Briefcase, Clock, FileCheck,
-  Check, Mail, Phone, Building, Users, ChevronDown, Scale, Umbrella
+  Check, Mail, Phone, Building, Users, ChevronDown, Scale, Umbrella, HelpCircle
 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,9 +20,58 @@ import { vidaGuardiasSchema, type VidaGuardiasForm } from '@/lib/validations';
 import logoBlanco from '@/assets/logo-vertical-blanco.png';
 
 const coverageOptions = [
-  { value: 'basico', label: 'BÁSICO DS-93', description: 'Cobertura mínima legal', price: 'Desde UF 0.5/mes', icon: Shield },
-  { value: 'completo', label: 'COMPLETO DS-93', description: 'Cobertura legal + adicionales', price: 'Desde UF 1/mes', icon: Shield, recommended: true },
-  { value: 'premium', label: 'PREMIUM DS-93', description: 'Máxima protección para tu personal', price: 'Desde UF 1.5/mes', icon: Shield },
+  { 
+    value: 'basico', 
+    label: 'BÁSICO DS-93', 
+    description: 'Cobertura mínima legal', 
+    price: 'Desde UF 0.5/mes', 
+    icon: Shield,
+    details: {
+      coberturas: [
+        'Muerte natural o accidental',
+        'Indemnización según montos DS-93'
+      ],
+      montos: 'Según tabla legal vigente (15-90 UF)',
+      ideal: 'Empresas que buscan cumplir el mínimo legal obligatorio'
+    }
+  },
+  { 
+    value: 'completo', 
+    label: 'COMPLETO DS-93', 
+    description: 'Cobertura legal + adicionales', 
+    price: 'Desde UF 1/mes', 
+    icon: Shield, 
+    recommended: true,
+    details: {
+      coberturas: [
+        'Todo lo del plan Básico',
+        'Invalidez total permanente',
+        'Invalidez parcial permanente',
+        'Gastos funerarios',
+        'Cobertura 24/7 (laboral y extralaboral)'
+      ],
+      montos: 'Montos incrementados hasta 150 UF',
+      ideal: 'Empresas que valoran a su personal y buscan protección completa'
+    }
+  },
+  { 
+    value: 'premium', 
+    label: 'PREMIUM DS-93', 
+    description: 'Máxima protección para tu personal', 
+    price: 'Desde UF 1.5/mes', 
+    icon: Shield,
+    details: {
+      coberturas: [
+        'Todo lo del plan Completo',
+        'Asistencia familiar extendida',
+        'Repatriación de restos',
+        'Doble indemnización por accidente',
+        'Anticipo por enfermedad terminal'
+      ],
+      montos: 'Montos máximos hasta 250 UF',
+      ideal: 'Empresas premium que ofrecen los mejores beneficios a su equipo'
+    }
+  },
 ] as const;
 
 const benefits = [
@@ -165,7 +215,55 @@ const VidaGuardias = () => {
                           <input type="radio" value={option.value} {...register('coverage')} className="sr-only" />
                           <div className="flex-1">
                             {'recommended' in option && option.recommended && <span className="text-xs font-semibold text-primary mb-1 block">✓ Recomendada</span>}
-                            <p className="font-bold">{option.label}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-bold">{option.label}</p>
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button 
+                                    type="button"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-5 h-5 rounded-full bg-muted hover:bg-primary/20 flex items-center justify-center transition-colors"
+                                    aria-label={`Ver detalles del plan ${option.label}`}
+                                  >
+                                    <HelpCircle className="w-3.5 h-3.5 text-muted-foreground" />
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-md">
+                                  <DialogHeader>
+                                    <DialogTitle className="flex items-center gap-2">
+                                      <Shield className="w-5 h-5 text-primary" />
+                                      {option.label}
+                                    </DialogTitle>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <div>
+                                      <h4 className="font-semibold mb-2 text-sm">Coberturas incluidas:</h4>
+                                      <ul className="space-y-1.5">
+                                        {option.details.coberturas.map((cobertura, i) => (
+                                          <li key={i} className="flex items-start gap-2 text-sm">
+                                            <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                                            <span>{cobertura}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                    {'montos' in option.details && option.details.montos && (
+                                      <div>
+                                        <h4 className="font-semibold mb-1 text-sm">Montos:</h4>
+                                        <p className="text-sm text-muted-foreground">{option.details.montos}</p>
+                                      </div>
+                                    )}
+                                    <div>
+                                      <h4 className="font-semibold mb-1 text-sm">Ideal para:</h4>
+                                      <p className="text-sm text-muted-foreground">{option.details.ideal}</p>
+                                    </div>
+                                    <div className="pt-2 border-t">
+                                      <p className="text-base font-semibold text-primary">{option.price}</p>
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                            </div>
                             <p className="text-sm text-muted-foreground">{option.description}</p>
                             <p className="text-sm font-medium text-primary mt-1">{option.price}</p>
                           </div>
