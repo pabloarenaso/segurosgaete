@@ -133,11 +133,11 @@ const VidaGuardias = () => {
             <div className="text-center md:text-left">
               {/* Brand Badge - Larger and responsive */}
               <motion.div 
-                className="flex items-center justify-center md:justify-start gap-3 mb-6"
+                className="flex md:hidden items-center justify-center gap-3 mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <img src={logoBlanco} alt="Seguros Gaete" className="h-20 sm:h-24 lg:h-32 w-auto" />
+                <img src={logoBlanco} alt="Seguros Gaete" className="h-20 sm:h-24 w-auto" />
               </motion.div>
               
               <motion.h1
