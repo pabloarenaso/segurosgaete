@@ -15,7 +15,7 @@ const Footer = () => {
             <img 
               src={logoHorizontal} 
               alt="Seguros Gaete" 
-              className="h-12 md:h-14 lg:h-16 w-auto"
+              className="h-20 md:h-24 w-auto"
             />
             <p className="text-background/80 text-sm leading-relaxed">
               {COMPANY.tagline}
