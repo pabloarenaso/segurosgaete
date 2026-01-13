@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import PartnerLogo from '@/components/shared/PartnerLogo';
+import logoBlanco from '@/assets/logo-horizontal-blanco.png';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
 
 // Componente de contador animado
@@ -103,6 +104,24 @@ const Index = () => {
           duration: 0.6,
           ease: 'easeOut'
         }}>
+            {/* Logo móvil - centrado */}
+            <motion.div 
+              className="flex md:hidden items-center justify-center mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <img src={logoBlanco} alt="Seguros Gaete" className="h-20 sm:h-24 w-auto" />
+            </motion.div>
+
+            {/* Logo tablet/desktop - alineado izquierda */}
+            <motion.div 
+              className="hidden md:flex items-center justify-start mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <img src={logoBlanco} alt="Seguros Gaete" className="h-24 lg:h-28 w-auto" />
+            </motion.div>
+
             <motion.span className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6" initial={{
             opacity: 0,
             scale: 0.9
