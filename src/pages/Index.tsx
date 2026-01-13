@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import PartnerLogo from '@/components/shared/PartnerLogo';
-import logoBlanco from '@/assets/logo-horizontal-blanco.png';
+import logoVerticalBlanco from '@/assets/logo-vertical-blanco.png';
 import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
 
 // Componente de contador animado
@@ -94,64 +94,62 @@ const Index = () => {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div className="max-w-2xl" initial={{
-          opacity: 0,
-          y: 30
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          ease: 'easeOut'
-        }}>
-            {/* Logo móvil - centrado */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-12">
+            
+            {/* Logo móvil - centrado arriba */}
             <motion.div 
-              className="flex md:hidden items-center justify-center mb-6"
+              className="flex md:hidden items-center justify-center mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-              <img src={logoBlanco} alt="Seguros Gaete" className="h-20 sm:h-24 w-auto" />
+              <img src={logoVerticalBlanco} alt="Seguros Gaete" className="h-32 sm:h-40 w-auto" />
             </motion.div>
 
-            {/* Logo tablet/desktop - alineado izquierda */}
+            {/* Columna izquierda - Contenido de texto */}
             <motion.div 
-              className="hidden md:flex items-center justify-start mb-6"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex-1 text-center md:text-left"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-              <img src={logoBlanco} alt="Seguros Gaete" className="h-24 lg:h-28 w-auto" />
+              <motion.span 
+                className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6" 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
+              </motion.span>
+
+              <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
+                Seguros que te acompañan en cada etapa
+              </h1>
+
+              <p className="text-xl lg:text-2xl text-background/90 mb-8">
+                Asesoría personalizada con las mejores aseguradoras del mercado
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
+                  <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    Hablar por WhatsApp
+                  </a>
+                </Button>
+              </div>
             </motion.div>
 
-            <motion.span className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6" initial={{
-            opacity: 0,
-            scale: 0.9
-          }} animate={{
-            opacity: 1,
-            scale: 1
-          }} transition={{
-            delay: 0.2
-          }}>
-              Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
-            </motion.span>
-
-            <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
-              Seguros que te acompañan en cada etapa
-            </h1>
-
-            <p className="text-xl lg:text-2xl text-background/90 mb-8">
-              Asesoría personalizada con las mejores aseguradoras del mercado
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              
-              <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
-                <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Hablar por WhatsApp
-                </a>
-              </Button>
-            </div>
-          </motion.div>
+            {/* Columna derecha - Logo desktop (costado derecho) */}
+            <motion.div 
+              className="hidden md:flex items-center justify-center flex-shrink-0"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <img src={logoVerticalBlanco} alt="Seguros Gaete" className="h-48 lg:h-64 xl:h-72 w-auto" />
+            </motion.div>
+          </div>
         </div>
       </section>
 
