@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin } from 'lucide-react';
 import { CONTACT, COMPANY } from '@/config/contact';
-import logo from '@/assets/logo.png';
+import logoHorizontal from '@/assets/logo-horizontal-blanco.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -13,9 +13,9 @@ const Footer = () => {
           {/* Column 1: Logo y descripción */}
           <div className="space-y-4">
             <img 
-              src={logo} 
+              src={logoHorizontal} 
               alt="Seguros Gaete" 
-              className="h-12 w-auto brightness-0 invert"
+              className="h-16 lg:h-20 w-auto"
             />
             <p className="text-background/80 text-sm leading-relaxed">
               {COMPANY.tagline}
