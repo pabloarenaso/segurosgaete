@@ -130,15 +130,6 @@ const SeguroEdificio = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Left - Content */}
             <div className="text-center md:text-left">
-              {/* Brand Badge - Larger and responsive */}
-              <motion.div 
-                className="flex md:hidden items-center justify-center gap-3 mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <img src={logoBlanco} alt="Seguros Gaete" className="h-20 sm:h-24 w-auto" />
-              </motion.div>
-              
               <motion.h1
                 className="text-3xl lg:text-5xl font-bold text-primary-foreground mb-4"
                 initial={{ opacity: 0, y: 20 }}
