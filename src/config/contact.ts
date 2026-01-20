@@ -29,6 +29,10 @@ export const CONTACT = {
   phones: ['+56 9 3457 4031', '+56 9 9918 0152'],
   email: 'contacto@segurosgaete.cl',
   address: '8 Norte 310 Local 5, Viña del Mar',
+  addresses: [
+    '8 Norte 310 Local 5, Viña del Mar',
+    'Cerro el Plomo 5931 Of. 1011, Las Condes'
+  ],
   schedule: 'Lunes a Viernes, 09:00 - 14:00 hrs. y 15:00 - 18:00 hrs.',
   registration: 'Registro Nº 3575 SVS',
   social: {

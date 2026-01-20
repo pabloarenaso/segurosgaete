@@ -47,7 +47,11 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary-light flex-shrink-0 mt-0.5" />
-                <span className="text-background/80 text-sm">{CONTACT.address}</span>
+                <div className="space-y-1">
+                  {CONTACT.addresses.map((addr, index) => (
+                    <span key={index} className="block text-background/80 text-sm">{addr}</span>
+                  ))}
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-primary-light flex-shrink-0" />
