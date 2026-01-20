@@ -40,10 +40,9 @@ const AnimatedCounter = ({ end, suffix = "" }: { end: number; suffix?: string })
   return <span ref={ref}>{count}{suffix}</span>;
 };
 
-// Hero benefits list
+// Hero benefits list (without years - already in paragraph)
 const heroBenefits = [
-  { icon: Award, text: `Más de ${COMPANY.yearsExperience} años de experiencia` },
-  { icon: Headphones, text: 'Atención personalizada' },
+  { icon: Headphones, text: 'Atención personalizada 24/7' },
   { icon: Percent, text: 'Descuentos preferenciales y coberturas exclusivas' },
   { icon: Target, text: 'Centraliza tus seguros en un solo lugar' },
   { icon: Shield, text: 'Asesoría profesional en caso de siniestros' },
@@ -107,15 +106,7 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
             
-            {/* Logo móvil - centrado arriba */}
-            <motion.div 
-              className="flex lg:hidden items-center justify-center mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <img src={logoVerticalBlanco} alt="Seguros Gaete" className="h-28 sm:h-36 w-auto" />
-            </motion.div>
+            {/* Logo removed for mobile/tablet - only header logo is shown */}
 
             {/* Columna izquierda - Contenido de texto */}
             <motion.div 
