@@ -1,3 +1,28 @@
+// Partner logos - local imports
+import fidSeguros from '@/assets/partners/fid-seguros.png';
+import assistCard from '@/assets/partners/assist-card.png';
+import auxiliaClub from '@/assets/partners/auxilia-club.jpg';
+import avlaSeguros from '@/assets/partners/avla-seguros.png';
+import bciSeguros from '@/assets/partners/bci-seguros.png';
+import biceVida from '@/assets/partners/bice-vida.png';
+import celesteAsistencia from '@/assets/partners/celeste-asistencia.png';
+import chubb from '@/assets/partners/chubb.png';
+import consorcio from '@/assets/partners/consorcio.png';
+import continental from '@/assets/partners/continental.png';
+import sura from '@/assets/partners/sura.png';
+import hdiSeguros from '@/assets/partners/hdi-seguros.png';
+import porvenir from '@/assets/partners/porvenir.png';
+import orion from '@/assets/partners/orion.png';
+import ohioNational from '@/assets/partners/ohio-national.png';
+import orsan from '@/assets/partners/orsan.png';
+import reale from '@/assets/partners/reale.png';
+import rentaNacional from '@/assets/partners/renta-nacional.jpg';
+import segurosOrion from '@/assets/partners/seguros-orion.png';
+import southbridge from '@/assets/partners/southbridge.jpg';
+import universalAssistance from '@/assets/partners/universal-assistance.png';
+import unnio from '@/assets/partners/unnio.png';
+import zurich from '@/assets/partners/zurich.png';
+
 export const CONTACT = {
   whatsapp: '+56934574031',
   whatsappSecondary: '+56999180152',
@@ -20,28 +45,32 @@ export const COMPANY = {
   foundedYear: 1987,
   yearsExperience: new Date().getFullYear() - 1987,
   clients: '1,200+',
-  insurers: '10+',
+  insurers: '23+',
 } as const;
 
-// Insurance partner logos - using publicly accessible URLs
-// The onError handler in Index.tsx will show the company name if logo fails to load
+// Insurance partner logos with local assets
 export const INSURANCE_PARTNERS = [
-  { name: 'HDI Seguros', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/HDI_Seguros_logo.svg/200px-HDI_Seguros_logo.svg.png' },
-  { name: 'BCI Seguros', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Logo_Bci.svg/200px-Logo_Bci.svg.png' },
-  { name: 'Liberty', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Liberty_Mutual_logo.svg/200px-Liberty_Mutual_logo.svg.png' },
-  { name: 'MAPFRE', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/MAPFRE_Logo.svg/200px-MAPFRE_Logo.svg.png' },
-  { name: 'Zurich', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Zurich_Insurance_Group_logo.svg/200px-Zurich_Insurance_Group_logo.svg.png' },
-  { name: 'MetLife', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/MetLife_logo.svg/200px-MetLife_logo.svg.png' },
-  { name: 'AIG', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/AIG_logo.svg/200px-AIG_logo.svg.png' },
-  { name: 'Chubb', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Chubb_Limited_Logo.svg/200px-Chubb_Limited_Logo.svg.png' },
-  { name: 'Consorcio', logo: '' },
-  { name: 'Chilena Consolidada', logo: '' },
-  { name: 'SURA', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Sura_logo.svg/200px-Sura_logo.svg.png' },
-  { name: 'BUPA', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Bupa_logo.svg/200px-Bupa_logo.svg.png' },
-  { name: 'Santander Seguros', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Banco_Santander_Logotipo.svg/200px-Banco_Santander_Logotipo.svg.png' },
-  { name: 'BNP Paribas Cardif', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Logo_BNP_Paribas.svg/200px-Logo_BNP_Paribas.svg.png' },
-  { name: 'Vida Security', logo: '' },
-  { name: 'Renta Nacional', logo: '' },
-  { name: 'Southbridge', logo: '' },
-  { name: 'Orsan', logo: '' },
+  { name: 'HDI Seguros', logo: hdiSeguros },
+  { name: 'BCI Seguros', logo: bciSeguros },
+  { name: 'BICE Vida', logo: biceVida },
+  { name: 'Sura', logo: sura },
+  { name: 'Zurich', logo: zurich },
+  { name: 'Chubb', logo: chubb },
+  { name: 'Consorcio', logo: consorcio },
+  { name: 'Continental', logo: continental },
+  { name: 'Orsan', logo: orsan },
+  { name: 'Reale', logo: reale },
+  { name: 'Renta Nacional', logo: rentaNacional },
+  { name: 'Southbridge', logo: southbridge },
+  { name: 'Fid Seguros', logo: fidSeguros },
+  { name: 'AVLA Seguros', logo: avlaSeguros },
+  { name: 'Porvenir', logo: porvenir },
+  { name: 'Orion', logo: orion },
+  { name: 'Seguros Orion', logo: segurosOrion },
+  { name: 'Ohio National', logo: ohioNational },
+  { name: 'UNNIO', logo: unnio },
+  { name: 'Assist Card', logo: assistCard },
+  { name: 'Auxilia Club', logo: auxiliaClub },
+  { name: 'Celeste Asistencia', logo: celesteAsistencia },
+  { name: 'Universal Assistance', logo: universalAssistance },
 ] as const;
