@@ -115,14 +115,6 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-              <motion.span 
-                className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6" 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
-              </motion.span>
 
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-background mb-6 leading-tight">
                 Seguros que te acompañan en cada etapa
