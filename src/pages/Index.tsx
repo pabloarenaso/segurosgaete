@@ -132,7 +132,7 @@ const Index = () => {
               </h1>
 
               <p className="text-xl lg:text-2xl text-background/90 mb-8">
-                Asesoría personalizada con las mejores aseguradoras del mercado
+                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad. Asesoría personalizada con las mejores aseguradoras del mercado.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
