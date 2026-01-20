@@ -1,35 +1,28 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network } from 'lucide-react';
+import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network, Percent, FileText } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
-import PartnerLogo from '@/components/shared/PartnerLogo';
+import PartnerMarquee from '@/components/shared/PartnerMarquee';
 import logoVerticalBlanco from '@/assets/logo-vertical-blanco.png';
-import { CONTACT, COMPANY, INSURANCE_PARTNERS } from '@/config/contact';
+import { CONTACT, COMPANY } from '@/config/contact';
 
 // Componente de contador animado
-const AnimatedCounter = ({
-  end,
-  suffix = ""
-}: {
-  end: number;
-  suffix?: string;
-}) => {
+const AnimatedCounter = ({ end, suffix = "" }: { end: number; suffix?: string }) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, {
-    once: true,
-    margin: "-100px"
-  });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   useEffect(() => {
     if (isInView) {
       const duration = 2000;
       const steps = 60;
       const increment = end / steps;
       let current = 0;
+      
       const timer = setInterval(() => {
         current += increment;
         if (current >= end) {
@@ -39,11 +32,23 @@ const AnimatedCounter = ({
           setCount(Math.floor(current));
         }
       }, duration / steps);
+
       return () => clearInterval(timer);
     }
   }, [isInView, end]);
+
   return <span ref={ref}>{count}{suffix}</span>;
 };
+
+// Hero benefits list
+const heroBenefits = [
+  { icon: Award, text: `Más de ${COMPANY.yearsExperience} años de experiencia` },
+  { icon: Headphones, text: 'Atención personalizada' },
+  { icon: Percent, text: 'Descuentos preferenciales y coberturas exclusivas' },
+  { icon: Target, text: 'Centraliza tus seguros en un solo lugar' },
+  { icon: Shield, text: 'Asesoría profesional en caso de siniestros' },
+];
+
 const tranquilidadBenefits = [{
   icon: DollarSign,
   highlight: "Ahorra dinero",
@@ -85,6 +90,7 @@ const tranquilidadBenefits = [{
   title: " tus problemas",
   description: "Nos encargamos de todos los trámites ante las aseguradoras en caso de siniestro."
 }];
+
 const Index = () => {
   return <Layout>
       {/* Hero Section */}
@@ -99,35 +105,35 @@ const Index = () => {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-12">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
             
             {/* Logo móvil - centrado arriba */}
-            <motion.div className="flex md:hidden items-center justify-center mb-8" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5
-          }}>
-              <img src={logoVerticalBlanco} alt="Seguros Gaete" className="h-32 sm:h-40 w-auto" />
+            <motion.div 
+              className="flex lg:hidden items-center justify-center mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <img src={logoVerticalBlanco} alt="Seguros Gaete" className="h-28 sm:h-36 w-auto" />
             </motion.div>
 
             {/* Columna izquierda - Contenido de texto */}
-            <motion.div className="flex-1 text-center md:text-left" initial={{
-            opacity: 0,
-            y: 30
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6,
-            ease: 'easeOut'
-          }}>
-              
+            <motion.div 
+              className="flex-1 text-center lg:text-left max-w-2xl"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              <motion.span 
+                className="inline-block px-4 py-2 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-6" 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad
+              </motion.span>
 
-              <h1 className="text-4xl lg:text-6xl font-bold text-background mb-6 leading-tight">
+              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-background mb-6 leading-tight">
                 Seguros que te acompañan en cada etapa
               </h1>
 
@@ -135,7 +141,14 @@ const Index = () => {
                 Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad. Asesoría personalizada con las mejores aseguradoras del mercado.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              {/* Double CTA */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90 text-base">
+                  <Link to="/contacto">
+                    <FileText className="w-5 h-5 mr-2" />
+                    Solicitar Cotización
+                  </Link>
+                </Button>
                 <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
                   <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="w-5 h-5 mr-2" />
@@ -145,18 +158,27 @@ const Index = () => {
               </div>
             </motion.div>
 
-            {/* Columna derecha - Logo desktop (costado derecho) */}
-            <motion.div className="hidden md:flex items-center justify-center flex-shrink-0" initial={{
-            opacity: 0,
-            x: 20
-          }} animate={{
-            opacity: 1,
-            x: 0
-          }} transition={{
-            duration: 0.6,
-            delay: 0.3
-          }}>
-              <img src={logoVerticalBlanco} alt="Seguros Gaete" className="h-48 lg:h-64 xl:h-72 w-auto" />
+            {/* Columna derecha - Lista de beneficios (solo desktop) */}
+            <motion.div 
+              className="hidden lg:flex flex-col gap-4 flex-shrink-0 max-w-md"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              {heroBenefits.map((benefit, index) => (
+                <motion.div
+                  key={benefit.text}
+                  className="flex items-center gap-3"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                >
+                  <div className="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
+                    <benefit.icon className="w-5 h-5 text-primary-light" />
+                  </div>
+                  <span className="text-background/90 text-base lg:text-lg">{benefit.text}</span>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </div>
@@ -352,9 +374,10 @@ const Index = () => {
             image: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=600"
           }].map((item, index) => <ScrollReveal key={item.title} delay={index * 0.1}>
                 <div className="bg-card rounded-xl overflow-hidden hover-lift border border-border">
-                  <div className="h-32 bg-cover bg-center" style={{
-                backgroundImage: `url('${item.image}')`
-              }} />
+                  <div 
+                    className="h-32 bg-cover bg-center"
+                    style={{ backgroundImage: `url('${item.image}')` }}
+                  />
                   <div className="p-6 text-center relative">
                     <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto -mt-12 mb-3 text-primary border-4 border-card">
                       {item.icon}
@@ -372,8 +395,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Alianzas y Respaldo */}
-      <section className="py-16 lg:py-24 bg-secondary">
+      {/* Alianzas y Respaldo - Infinite Marquee */}
+      <section className="py-16 lg:py-24 bg-secondary overflow-hidden">
         <div className="container mx-auto px-4">
           <ScrollReveal className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -383,15 +406,9 @@ const Index = () => {
               Trabajamos con las compañías más confiables del mercado
             </p>
           </ScrollReveal>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 lg:gap-6">
-            {INSURANCE_PARTNERS.map((partner, index) => <ScrollReveal key={partner.name} delay={index * 0.03}>
-                <div className="bg-card rounded-lg p-4 flex items-center justify-center h-20 lg:h-24 hover:shadow-md transition-shadow">
-                  <PartnerLogo name={partner.name} logo={partner.logo} />
-                </div>
-              </ScrollReveal>)}
-          </div>
         </div>
+        
+        <PartnerMarquee />
       </section>
 
       {/* Nuestro Compromiso */}
@@ -406,36 +423,40 @@ const Index = () => {
 
             <ScrollReveal delay={0.2}>
               <div>
-                <span className="text-primary font-semibold text-sm uppercase tracking-wider">
-                  Nuestra promesa
-                </span>
-                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mt-2 mb-4">
-                  Honestidad, transparencia y cercanía
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                  Nuestro compromiso contigo
                 </h2>
-
-                <div className="space-y-4 text-muted-foreground mb-8">
-                  <p>
-                    Desde 1987 hemos construido relaciones duraderas con nuestros 
-                    clientes, basadas en la confianza y el compromiso genuino con 
-                    su tranquilidad.
-                  </p>
-                  <p>
-                    Estamos inscritos bajo el Registro Nº 3575 de la Superintendencia 
-                    de Valores y Seguros y somos miembros activos de ANS (Alianza de 
-                    Negocios en Seguros).
-                  </p>
-                  <p>
-                    Te acompañamos en cada etapa: desde la cotización inicial, pasando 
-                    por la contratación, hasta el apoyo completo en caso de siniestro.
-                  </p>
+                
+                <div className="space-y-4">
+                  {[
+                    "Asesoría objetiva e imparcial en la selección de seguros",
+                    "Acompañamiento completo en el proceso de siniestros",
+                    "Actualización constante de tus pólizas según tus necesidades",
+                    "Comunicación clara y transparente en todo momento",
+                    "Gestión ágil de trámites con las aseguradoras"
+                  ].map((item, index) => (
+                    <motion.div 
+                      key={index}
+                      className="flex items-start gap-3"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <CheckCircle className="w-4 h-4 text-primary" />
+                      </div>
+                      <p className="text-muted-foreground">{item}</p>
+                    </motion.div>
+                  ))}
                 </div>
 
-                <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-xl">
-                  <CheckCircle className="w-6 h-6 text-primary flex-shrink-0" />
-                  <span className="font-medium text-foreground">
-                    Miembro de ANS (Alianza de Negocios en Seguros)
-                  </span>
-                </div>
+                <Button asChild size="lg" className="mt-8">
+                  <Link to="/nosotros">
+                    Conoce nuestra historia
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
               </div>
             </ScrollReveal>
           </div>
@@ -443,9 +464,13 @@ const Index = () => {
       </section>
 
       {/* CTA Final */}
-      <div id="contacto">
-        <CTASection />
-      </div>
+      <CTASection
+        title="¿Necesitas asesoría personalizada?"
+        description="Contáctanos hoy y te ayudamos a encontrar el seguro perfecto para ti"
+        primaryButtonText="Solicitar cotización"
+        primaryButtonLink="/contacto"
+      />
     </Layout>;
 };
+
 export default Index;
