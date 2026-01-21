@@ -19,6 +19,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Mulish', 'system-ui', 'sans-serif'],
+        heading: ['Gotham', 'Montserrat', 'sans-serif'],
+        body: ['Muli', 'Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -26,6 +28,11 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        'gaete': {
+          primary: '#157B8D',
+          secondary: '#97D4D4',
+          accent: '#90C3CC',
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
