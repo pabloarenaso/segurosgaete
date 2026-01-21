@@ -66,7 +66,8 @@ const HeroWithForm = ({
     return (
         <section className="relative bg-slate-50 overflow-hidden py-16 lg:py-24">
             {/* Decorative background element similar to the yellow one in reference */}
-            <div className="absolute top-0 right-0 w-1/3 h-2/3 bg-yellow-400 rounded-bl-full opacity-20 -z-0 translate-x-1/4 -translate-y-1/4" />
+            {/* Decorative background element - Fixed Circle Shape */}
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] lg:w-[1200px] lg:h-[1200px] bg-gaete-primary/20 rounded-full -z-0 translate-x-1/3 -translate-y-1/2" />
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="flex flex-col lg:flex-row items-center gap-12">
