@@ -91,6 +91,9 @@ const faqs = [
   { question: "¿Cómo reporto un siniestro?", answer: "Contáctanos inmediatamente por WhatsApp, teléfono o email." },
 ];
 
+import WhyChooseUs from '@/components/sections/WhyChooseUs';
+import ResourcesSection from '@/components/sections/ResourcesSection';
+
 const SeguroEdificio = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -146,11 +149,15 @@ const SeguroEdificio = () => {
         </div>
       </section>
 
+      <WhyChooseUs />
+
       <FAQWithVideo
         faqs={faqs}
         videoThumbnail="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800"
         videoCaption="Todo sobre el seguro de edificios"
       />
+
+      <ResourcesSection />
 
       <CTASection primaryButtonLink="/seguros/guardias" primaryButtonText="Ver otros seguros" />
     </Layout>
