@@ -75,8 +75,16 @@ export const landingService = {
             const response = await api.get('/menu');
             return response.data;
         } catch (error) {
-            console.error("Error fetching menu", error);
-            return { items: [] };
+            console.warn("API Menu fetch failed, trying static fallback...", error);
+            try {
+                // Fallback to static JSON file in public folder
+                // This works for static deployments where 'data/menu-config.json' exists
+                const fallbackResponse = await axios.get('/data/menu-config.json');
+                return fallbackResponse.data;
+            } catch (fallbackError) {
+                console.error("Static menu fetch also failed", fallbackError);
+                return { items: [] };
+            }
         }
     }
 };
