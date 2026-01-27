@@ -4,12 +4,106 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown, Phone, MessageCircle } from 'lucide-react';
 import { CONTACT } from '@/config/contact';
 import logo from '@/assets/logo-horizontal-color.png';
+import { useQuery } from '@tanstack/react-query';
+import { landingService } from '@/services/api';
+
+const DesktopMenuItem = ({ item }: { item: any }) => {
+  const hasSubmenu = item.submenu && item.submenu.length > 0;
+
+  if (!hasSubmenu) {
+    return (
+      <Link
+        to={item.path || '#'}
+        className="text-foreground hover:text-primary transition-colors font-medium link-underline"
+      >
+        {item.name}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="relative group">
+      <button className="flex items-center gap-1 text-foreground hover:text-primary transition-colors font-medium py-2">
+        {item.name}
+        <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+      </button>
+      <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 w-max">
+        <div className="bg-white rounded-lg shadow-xl border border-border py-2 min-w-[220px]">
+          {item.submenu.map((subItem: any, idx: number) => {
+            // Check for Level 3
+            if (subItem.submenu && subItem.submenu.length > 0) {
+              return (
+                <div key={idx} className="relative group/sub px-4 py-3 hover:bg-slate-50">
+                  <button className="flex items-center justify-between w-full text-foreground hover:text-primary">
+                    <span>{subItem.name}</span>
+                    <span className="ml-2">›</span>
+                  </button>
+                  {/* Level 3 Dropdown */}
+                  <div className="absolute left-full top-0 ml-1 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200">
+                    <div className="bg-white rounded-lg shadow-xl border border-border py-2 min-w-[220px]">
+                      {subItem.submenu.map((lvl3: any, i: number) => (
+                        <Link
+                          key={i}
+                          to={lvl3.path || '#'}
+                          className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-slate-50"
+                        >
+                          {lvl3.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <Link
+                key={idx}
+                to={subItem.path || '#'}
+                className="block px-4 py-3 text-foreground hover:bg-primary/5 hover:text-primary transition-colors"
+              >
+                {subItem.name}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
+
+  const { data: menuConfig } = useQuery({
+    queryKey: ['menu'],
+    queryFn: landingService.getMenu
+  });
+
+  // Default menu if API fails or is empty, ensuring 'Seguros' exists
+  const defaultItems = [
+    { label: 'Inicio', href: '/' },
+    { label: 'Seguros', href: '#', items: [] },
+    { label: 'Contacto', href: '/#contacto' }
+  ];
+
+  const rawItems = (menuConfig?.items && menuConfig.items.length > 0) ? menuConfig.items : defaultItems;
+
+  // Map API structure (label/href/items) to Component structure (name/path/submenu)
+  // The API sends { label, href, items: [] }
+  // The Component expects { name, path, submenu: [] } based on original code
+  // Let's adapt here or change component to use API keys. 
+  // Changing strict keys is better for long term, but let's map for minimal regression risk to existing styles.
+  // Recursive mapping function
+  const mapMenuItem = (item: any): any => ({
+    name: item.label,
+    path: item.href,
+    submenu: item.items && item.items.length > 0 ? item.items.map(mapMenuItem) : undefined
+  });
+
+  const menuItems = rawItems.map(mapMenuItem);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,31 +118,6 @@ const Header = () => {
     setOpenSubmenu(null);
   }, [location]);
 
-  const menuItems = [
-    { name: 'Inicio', path: '/' },
-    { 
-      name: 'Nosotros', 
-      submenu: [
-        { name: 'Quiénes Somos', path: '/#nosotros' },
-        { name: 'Nuestro Compromiso', path: '/#compromiso' },
-      ]
-    },
-    { 
-      name: 'Seguros', 
-      submenu: [
-        { name: 'Seguro de Edificio', path: '/seguros/edificio' },
-        { name: 'Vida Guardias DS-93', path: '/seguros/guardias' },
-      ]
-    },
-    { 
-      name: 'Servicios', 
-      submenu: [
-        { name: 'Asesoría Personalizada', path: '/#servicios' },
-        { name: 'Gestión de Siniestros', path: '/#servicios' },
-      ]
-    },
-    { name: 'Contacto', path: '/#contacto' },
-  ];
 
   const handleSubmenuToggle = (menuName: string) => {
     setOpenSubmenu(openSubmenu === menuName ? null : menuName);
@@ -56,57 +125,29 @@ const Header = () => {
 
   return (
     <>
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-background/95 backdrop-blur-md shadow-md' 
-            : 'bg-background/80 backdrop-blur-sm'
-        }`}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-background/95 backdrop-blur-md shadow-md'
+          : 'bg-background/80 backdrop-blur-sm'
+          }`}
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="container mx-auto px-4">
           <nav className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
             <Link to="/" className="flex-shrink-0">
-              <img 
-                src={logo} 
-                alt="Seguros Gaete" 
+              <img
+                src={logo}
+                alt="Seguros Gaete"
                 className="h-14 lg:h-20 w-auto"
               />
             </Link>
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center gap-6">
-              {menuItems.map((item) => (
-                item.submenu ? (
-                  <div key={item.name} className="relative group">
-                    <button className="flex items-center gap-1 text-foreground hover:text-primary transition-colors font-medium py-2">
-                      {item.name}
-                      <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-                    </button>
-                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      <div className="bg-card rounded-lg shadow-elevated border border-border py-2 min-w-[220px]">
-                        {item.submenu.map((subItem) => (
-                          <Link
-                            key={subItem.path + subItem.name}
-                            to={subItem.path}
-                            className="block px-4 py-3 text-foreground hover:bg-primary/5 hover:text-primary transition-colors"
-                          >
-                            {subItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    key={item.path}
-                    to={item.path!}
-                    className="text-foreground hover:text-primary transition-colors font-medium link-underline"
-                  >
-                    {item.name}
-                  </Link>
-                )
+              {/* {console.log("Rendering Menu Items:", menuItems)} */}
+              {menuItems.map((item: any, index: number) => (
+                <DesktopMenuItem key={index} item={item} />
               ))}
 
               {/* CTA Buttons */}
@@ -177,7 +218,7 @@ const Header = () => {
                 {/* Mobile Navigation */}
                 <nav className="flex-1 overflow-y-auto p-4">
                   <div className="space-y-1">
-                    {menuItems.map((item) => (
+                    {menuItems.map((item: any) => (
                       item.submenu ? (
                         <div key={item.name}>
                           <button
@@ -195,14 +236,31 @@ const Header = () => {
                                 exit={{ height: 0, opacity: 0 }}
                                 className="overflow-hidden pl-4"
                               >
-                                {item.submenu.map((subItem) => (
-                                  <Link
-                                    key={subItem.path + subItem.name}
-                                    to={subItem.path}
-                                    className="block py-3 px-4 text-muted-foreground hover:text-primary transition-colors"
-                                  >
-                                    {subItem.name}
-                                  </Link>
+                                {item.submenu.map((subItem: any) => (
+                                  subItem.submenu ? (
+                                    <div key={subItem.name} className="pl-4">
+                                      <div className="py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                                        {subItem.name}
+                                      </div>
+                                      {subItem.submenu.map((lvl3: any) => (
+                                        <Link
+                                          key={lvl3.path + lvl3.name}
+                                          to={lvl3.path || '#'}
+                                          className="block py-2 pl-4 text-muted-foreground hover:text-primary transition-colors text-sm border-l border-border ml-1"
+                                        >
+                                          {lvl3.name}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <Link
+                                      key={subItem.path + subItem.name}
+                                      to={subItem.path || '#'}
+                                      className="block py-3 px-4 text-muted-foreground hover:text-primary transition-colors"
+                                    >
+                                      {subItem.name}
+                                    </Link>
+                                  )
                                 ))}
                               </motion.div>
                             )}
@@ -211,7 +269,7 @@ const Header = () => {
                       ) : (
                         <Link
                           key={item.path}
-                          to={item.path!}
+                          to={item.path || '#'}
                           className="block py-3 px-4 text-foreground hover:bg-primary/5 rounded-lg transition-colors font-medium"
                         >
                           {item.name}

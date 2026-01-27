@@ -12,9 +12,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Column 1: Logo y descripción */}
           <div className="space-y-4">
-            <img 
-              src={logoHorizontal} 
-              alt="Seguros Gaete" 
+            <img
+              src={logoHorizontal}
+              alt="Seguros Gaete"
               className="h-20 md:h-24 w-auto"
             />
             <p className="text-background/80 text-sm leading-relaxed">
@@ -56,13 +56,13 @@ const Footer = () => {
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-primary-light flex-shrink-0" />
                 <div className="space-y-1">
-                  <a 
+                  <a
                     href={`tel:${CONTACT.phones[0].replace(/\s/g, '')}`}
                     className="block text-background/80 hover:text-background text-sm transition-colors"
                   >
                     {CONTACT.phones[0]}
                   </a>
-                  <a 
+                  <a
                     href={`tel:${CONTACT.phones[1].replace(/\s/g, '')}`}
                     className="block text-background/80 hover:text-background text-sm transition-colors"
                   >
@@ -72,7 +72,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-primary-light flex-shrink-0" />
-                <a 
+                <a
                   href={`mailto:${CONTACT.email}`}
                   className="text-background/80 hover:text-background text-sm transition-colors"
                 >
@@ -124,10 +124,13 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="border-t border-background/10">
-        <div className="container mx-auto px-4 py-4">
-          <p className="text-center text-background/60 text-sm">
+        <div className="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-400 text-sm">
             © {currentYear} {COMPANY.name}. Todos los derechos reservados.
           </p>
+          <Link to="/admin/login" className="text-gray-500 hover:text-white text-xs transition-colors opacity-70 hover:opacity-100">
+            Acceso Admin
+          </Link>
         </div>
       </div>
     </footer>

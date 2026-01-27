@@ -1,0 +1,16 @@
+[
+  {
+    "id": "6042fb2b-26b3-4ac7-a8af-d91403ab6627",
+    "name": "Seguro de Edificio",
+    "slug": "/seguros/edificio",
+    "createdAt": "2026-01-27T15:05:05.361Z",
+    "updatedAt": "2026-01-27T15:05:05.361Z"
+  },
+  {
+    "id": "b74e23cf-1718-4291-b522-9289c3baf8de",
+    "name": "Vida Guardias DS-93",
+    "slug": "/seguros/guardias",
+    "createdAt": "2026-01-27T15:05:05.369Z",
+    "updatedAt": "2026-01-27T15:05:05.369Z"
+  }
+]

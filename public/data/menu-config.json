@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "label": "Inicio",
+      "href": "/"
+    },
+    {
+      "label": "Seguros",
+      "href": "#",
+      "items": [
+        {
+          "label": "Seguros Comunidades",
+          "href": "#",
+          "items": [
+            {
+              "label": "Seguro Edificio",
+              "href": "/seguros/edificio"
+            },
+            {
+              "label": "Seguro Espacios Comunes",
+              "href": "https://segurosgaete.cl/seguros/seguros-comunidades/seguro-espacios-comunes"
+            },
+            {
+              "label": "Vida Guardias DS-93",
+              "href": "/seguros/guardias"
+            },
+            {
+              "label": "Responsabilidad Civil Directores",
+              "href": "https://segurosgaete.cl/seguros/seguros-comunidades/d-o-responsabilidad-civil-de-directores-y-administradores-de-copropiedades"
+            }
+          ]
+        },
+        {
+          "label": "Seguros de Ingeniería",
+          "href": "#",
+          "items": [
+            {
+              "label": "Todo Riesgo Construcción",
+              "href": "https://segurosgaete.cl/seguros/ingenieria/todo-riesgo-en-construccion"
+            },
+            {
+              "label": "Equipo Móvil Contratista",
+              "href": "https://segurosgaete.cl/seguros/ingenieria/equipo-movil-contratista"
+            }
+          ]
+        },
+        {
+          "label": "Seguros para Empresas",
+          "href": "#",
+          "items": [
+            {
+              "label": "Vehículos y Flotas",
+              "href": "https://segurosgaete.cl/seguros/empresas/vehiculos-y-flotas"
+            },
+            {
+              "label": "Responsabilidad Civil General",
+              "href": "https://segurosgaete.cl/seguros/empresas/responsabilidad-civil-general"
+            },
+            {
+              "label": "Transporte / Carga",
+              "href": "https://segurosgaete.cl/seguros/empresas/transporte"
+            }
+          ]
+        },
+        {
+          "label": "Seguros para Personas",
+          "href": "#",
+          "items": [
+            {
+              "label": "Seguro de Hogar",
+              "href": "https://segurosgaete.cl/seguros/personas/seguro-hogar-sismo-incendio-robo"
+            },
+            {
+              "label": "Accidentes Personales",
+              "href": "https://segurosgaete.cl/seguros/personas/accidentes-personales"
+            },
+            {
+              "label": "Seguro Automotriz",
+              "href": "https://segurosgaete.cl/seguros/personas/seguro-automotriz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "SOAP",
+      "href": "https://segurosgaete.cl/soap"
+    },
+    {
+      "label": "Clientes",
+      "href": "#",
+      "items": [
+        {
+          "label": "Portal de Pagos",
+          "href": "https://segurosgaete.cl/clientes/pagos"
+        },
+        {
+          "label": "Denuncia de Siniestros",
+          "href": "https://segurosgaete.cl/clientes/siniestros"
+        }
+      ]
+    },
+    {
+      "label": "Quiénes Somos",
+      "href": "https://segurosgaete.cl/quienes-somos"
+    },
+    {
+      "label": "Contacto",
+      "href": "https://segurosgaete.cl/contacto"
+    }
+  ]
+}

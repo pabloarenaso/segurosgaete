@@ -1,0 +1,195 @@
+{
+  "id": "6042fb2b-26b3-4ac7-a8af-d91403ab6627",
+  "name": "Seguro de Edificio",
+  "slug": "/seguros/edificio",
+  "createdAt": "2026-01-27T15:05:05.361Z",
+  "updatedAt": "2026-01-27T15:05:05.361Z",
+  "content": {
+    "hero": {
+      "title": "La protección más completa para tu Edificio",
+      "subtitle": "Protección integral para espacios comunes, departamentos y responsabilidad civil de administradores. Cumple con la normativa vigente y asegura la tranquilidad de tu comunidad.",
+      "backgroundImage": "/images/uploads/edificio-hero.jpg"
+    },
+    "form": {
+      "title": "Cotiza tu Seguro",
+      "fields": [
+        {
+          "id": "name",
+          "label": "Nombre",
+          "type": "text",
+          "placeholder": "",
+          "required": true
+        },
+        {
+          "id": "email",
+          "label": "Mail",
+          "type": "email",
+          "placeholder": "",
+          "required": true
+        },
+        {
+          "id": "phone",
+          "label": "Teléfono",
+          "type": "tel",
+          "placeholder": "+569...",
+          "required": true
+        },
+        {
+          "id": "role",
+          "label": "Cargo en la comunidad",
+          "type": "select",
+          "placeholder": "Seleccionar cargo",
+          "options": [
+            "Administrador",
+            "Miembro del Comité",
+            "Residente",
+            "Corredor de Propiedades"
+          ],
+          "required": true
+        },
+        {
+          "id": "address",
+          "label": "Dirección del Edificio",
+          "type": "text",
+          "placeholder": "Calle y número",
+          "required": true
+        },
+        {
+          "id": "units",
+          "label": "N° de Departamentos",
+          "type": "number",
+          "placeholder": "Ej: 40",
+          "required": true
+        },
+        {
+          "id": "floors",
+          "label": "N° de Pisos",
+          "type": "number",
+          "placeholder": "Ej: 10",
+          "required": true
+        },
+        {
+          "id": "coverage",
+          "label": "Tipo de Cobertura",
+          "type": "select",
+          "options": [
+            "BÁSICA",
+            "INTERMEDIA",
+            "PREMIUM"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "coverages": {
+      "show": true,
+      "title": "¿Qué protege este seguro?",
+      "subtitle": "Cobertura integral para tu edificio o condominio",
+      "items": [
+        {
+          "title": "Incendio y Terremoto",
+          "description": "Cobertura ante siniestros mayores incluyendo daños estructurales y contenido común",
+          "icon": "Flame"
+        },
+        {
+          "title": "Daños por Agua",
+          "description": "Incluye filtraciones en techos, roturas de matrices y daños a terceros",
+          "icon": "Droplets"
+        },
+        {
+          "title": "Responsabilidad Civil",
+          "description": "Protección legal si un tercero sufre un accidente en las áreas comunes",
+          "icon": "Scale"
+        },
+        {
+          "title": "Robo Especies Comunes",
+          "description": "Cubre hurto de equipamiento, mobiliario y bienes ubicados en espacios compartidos",
+          "icon": "ShieldCheck"
+        },
+        {
+          "title": "Equipos y Maquinarias",
+          "description": "Ascensores, calderas, bombas de agua y generadores eléctricos asegurados",
+          "icon": "Cog"
+        },
+        {
+          "title": "Vidrios y Cristales",
+          "description": "Reposición de ventanales, mamparas, espejos y puertas de cristal dañadas",
+          "icon": "PanelTop"
+        }
+      ]
+    },
+    "benefits": {
+      "show": true,
+      "title": "¿Por qué elegirnos?",
+      "subtitle": "Nuestros diferenciales diseñados para optimizar su gestión y brindar tranquilidad.",
+      "items": [
+        {
+          "title": "Atención 24/7",
+          "description": "Para usted y su comunidad, siempre disponibles cuando nos necesiten.",
+          "icon": "Clock"
+        },
+        {
+          "title": "Soporte Rápido",
+          "description": "Equipo dedicado con tiempos de respuesta menores a 2 horas.",
+          "icon": "Zap"
+        },
+        {
+          "title": "Estudio Técnico",
+          "description": "Informe profesional de 15 páginas para respaldar el monto asegurado.",
+          "icon": "FileText"
+        },
+        {
+          "title": "Comparativo Completo",
+          "description": "Cotización clara y ordenada en más de 10 compañías de seguros.",
+          "icon": "Users"
+        },
+        {
+          "title": "Precios Preferenciales",
+          "description": "Coberturas exclusivas y beneficios negociados para la comunidad.",
+          "icon": "BadgePercent"
+        },
+        {
+          "title": "Catastro Digital (Ley 21.442)",
+          "description": "Cumplimiento legal con planilla y carpeta digital consolidadas.",
+          "icon": "MonitorSmartphone"
+        },
+        {
+          "title": "Asesoría Experta",
+          "description": "Acompañamiento personalizado durante toda la vigencia.",
+          "icon": "Award"
+        },
+        {
+          "title": "Centralización Total",
+          "description": "Todos sus seguros en un solo lugar: Espacios Comunes, Unidades, RC Comité, Vida, etc.",
+          "icon": "Building2"
+        }
+      ]
+    },
+    "faq": {
+      "show": true,
+      "title": "Preguntas Frecuentes",
+      "video": {
+        "iframeUrl": "https://www.youtube.com/embed/example",
+        "thumbnail": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
+        "title": "Todo sobre el seguro de edificios"
+      },
+      "questions": [
+        {
+          "question": "¿Qué documentos necesito para cotizar?",
+          "answer": "Solo necesitas información básica del edificio: dirección, cantidad de departamentos y tipo de construcción."
+        },
+        {
+          "question": "¿Cuánto demora el proceso?",
+          "answer": "Una vez aprobada la propuesta, el proceso toma entre 24 a 48 horas hábiles."
+        },
+        {
+          "question": "¿Puedo modificar mi cobertura?",
+          "answer": "Sí, puedes ajustar tu cobertura en cualquier momento."
+        }
+      ]
+    },
+    "resources": {
+      "show": true
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "id": "b74e23cf-1718-4291-b522-9289c3baf8de",
+  "name": "Vida Guardias DS-93",
+  "slug": "/seguros/guardias",
+  "createdAt": "2026-01-27T15:05:05.369Z",
+  "updatedAt": "2026-01-27T15:05:05.369Z",
+  "content": {
+    "hero": {
+      "title": "Seguro de Vida para Guardias (DS-93)",
+      "subtitle": "Cumple con la normativa legal vigente del Decreto Supremo 93 de manera rápida y sencilla. Protege a tu personal de seguridad con la mejor asesoría del mercado.",
+      "backgroundImage": "/images/uploads/guardia-hero-v2.png"
+    },
+    "form": {
+      "title": "Cotiza tu Seguro",
+      "fields": [
+        {
+          "id": "name",
+          "label": "Nombre de Contacto",
+          "type": "text",
+          "placeholder": "Tu nombre",
+          "required": true
+        },
+        {
+          "id": "company",
+          "label": "Empresa",
+          "type": "text",
+          "placeholder": "Nombre de la empresa",
+          "required": true
+        },
+        {
+          "id": "email",
+          "label": "Email Corporativo",
+          "type": "email",
+          "placeholder": "contacto@empresa.cl",
+          "required": true
+        },
+        {
+          "id": "phone",
+          "label": "Teléfono",
+          "type": "tel",
+          "placeholder": "+569...",
+          "required": true
+        },
+        {
+          "id": "guards",
+          "label": "Cantidad de Guardias",
+          "type": "number",
+          "placeholder": "Ej: 5",
+          "required": true
+        },
+        {
+          "id": "coverage",
+          "label": "Plan Deseado",
+          "type": "select",
+          "options": [
+            "BÁSICO DS-93",
+            "COMPLETO DS-93",
+            "PREMIUM DS-93"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "coverages": {
+      "show": true,
+      "title": "¿Qué protege este seguro?",
+      "subtitle": "Cumplimiento legal y protección para tu equipo",
+      "items": [
+        {
+          "title": "Muerte Natural o Accidental",
+          "description": "Indemnización según montos DS-93",
+          "icon": "HeartPulse"
+        },
+        {
+          "title": "Invalidez Total o Parcial",
+          "description": "Compensación por incapacidad permanente",
+          "icon": "Scale"
+        },
+        {
+          "title": "Gastos Funerarios",
+          "description": "Apoyo económico inmediato para la familia",
+          "icon": "Briefcase"
+        },
+        {
+          "title": "Cumplimiento Legal",
+          "description": "Evita multas cumpliendo el DS-93",
+          "icon": "Shield"
+        },
+        {
+          "title": "Cobertura 24/7",
+          "description": "Protección dentro y fuera del horario laboral",
+          "icon": "Umbrella"
+        },
+        {
+          "title": "Gestión Simplificada",
+          "description": "Trámites rápidos y sencillos",
+          "icon": "FileCheck"
+        }
+      ]
+    },
+    "benefits": {
+      "show": false,
+      "title": "",
+      "subtitle": "",
+      "items": []
+    },
+    "faq": {
+      "show": true,
+      "title": "Preguntas Frecuentes DS-93",
+      "video": {
+        "iframeUrl": "",
+        "thumbnail": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800",
+        "title": "Seguro de vida obligatorio DS-93"
+      },
+      "questions": [
+        {
+          "question": "¿Qué es el DS-93?",
+          "answer": "El Decreto Supremo 93 establece la obligatoriedad de un seguro de vida para guardias de seguridad."
+        },
+        {
+          "question": "¿Es obligatorio para todas las empresas?",
+          "answer": "Sí, toda empresa con personal de seguridad debe cumplir con esta normativa."
+        },
+        {
+          "question": "¿Cuánto cuesta?",
+          "answer": "Desde UF 0.5 por guardia al mes, dependiendo de la cobertura."
+        }
+      ]
+    },
+    "resources": {
+      "show": true
+    }
+  }
+}
