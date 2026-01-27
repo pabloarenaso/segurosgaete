@@ -25,12 +25,34 @@ api.interceptors.request.use((config) => {
 
 export const landingService = {
     getAll: async () => {
-        const response = await api.get('/landings');
-        return response.data;
+        try {
+            const response = await api.get('/landings');
+            return response.data;
+        } catch (error) {
+            console.warn("API getAll failed, trying static fallback...", error);
+            try {
+                const fallbackResponse = await axios.get('/data/landings/index.json');
+                return fallbackResponse.data;
+            } catch (fallbackError) {
+                console.error("Static index fetch failed", fallbackError);
+                return [];
+            }
+        }
     },
     getById: async (id: string) => {
-        const response = await api.get(`/landings/${id}`);
-        return response.data;
+        try {
+            const response = await api.get(`/landings/${id}`);
+            return response.data;
+        } catch (error) {
+            console.warn(`API getById(${id}) failed, trying static fallback...`, error);
+            try {
+                const fallbackResponse = await axios.get(`/data/landings/landing-${id}.json`);
+                return fallbackResponse.data;
+            } catch (fallbackError) {
+                console.error("Static landing fetch failed", fallbackError);
+                throw fallbackError;
+            }
+        }
     },
     create: async (data: { name: string; slug: string; menuCategory: string }) => {
         const response = await api.post('/landings', data);
