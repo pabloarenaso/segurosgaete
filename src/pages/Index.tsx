@@ -22,7 +22,7 @@ const AnimatedCounter = ({ end, suffix = "" }: { end: number; suffix?: string })
       const steps = 60;
       const increment = end / steps;
       let current = 0;
-      
+
       const timer = setInterval(() => {
         current += increment;
         if (current >= end) {
@@ -70,7 +70,7 @@ const tranquilidadBenefits = [{
   description: "Te ofrecemos los mejores productos del mercado en términos de coberturas, precios y respaldo."
 }, {
   icon: Award,
-  highlight: "35 años",
+  highlight: "40 años",
   title: " de experiencia",
   description: "Más de tres décadas asesorando a personas y empresas en la protección de su patrimonio."
 }, {
@@ -92,86 +92,86 @@ const tranquilidadBenefits = [{
 
 const Index = () => {
   return <Layout>
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] lg:min-h-[80vh] flex items-center overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-cover bg-center" style={{
+    {/* Hero Section */}
+    <section className="relative min-h-[90vh] lg:min-h-[80vh] flex items-center overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-cover bg-center" style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1920')`
         }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+
+          {/* Logo removed for mobile/tablet - only header logo is shown */}
+
+          {/* Columna izquierda - Contenido de texto */}
+          <motion.div
+            className="flex-1 text-center lg:text-left max-w-2xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+
+            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-background mb-6 leading-tight">
+              Seguros que te acompañan en cada etapa
+            </h1>
+
+            <p className="text-xl lg:text-2xl text-background/90 mb-8">
+              Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad. Asesoría personalizada con las mejores aseguradoras del mercado.
+            </p>
+
+            {/* Double CTA */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90 text-base">
+                <Link to="/contacto">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Solicitar Cotización
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
+                <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Hablar por WhatsApp
+                </a>
+              </Button>
+            </div>
+          </motion.div>
+
+          {/* Columna derecha - Lista de beneficios (solo desktop) */}
+          <motion.div
+            className="hidden lg:flex flex-col gap-4 flex-shrink-0 max-w-md"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            {heroBenefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.text}
+                className="flex items-center gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+              >
+                <div className="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <benefit.icon className="w-5 h-5 text-primary-light" />
+                </div>
+                <span className="text-background/90 text-base lg:text-lg">{benefit.text}</span>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
+      </div>
+    </section>
 
-        {/* Content */}
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
-            
-            {/* Logo removed for mobile/tablet - only header logo is shown */}
-
-            {/* Columna izquierda - Contenido de texto */}
-            <motion.div 
-              className="flex-1 text-center lg:text-left max-w-2xl"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-
-              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-background mb-6 leading-tight">
-                Seguros que te acompañan en cada etapa
-              </h1>
-
-              <p className="text-xl lg:text-2xl text-background/90 mb-8">
-                Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad. Asesoría personalizada con las mejores aseguradoras del mercado.
-              </p>
-
-              {/* Double CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90 text-base">
-                  <Link to="/contacto">
-                    <FileText className="w-5 h-5 mr-2" />
-                    Solicitar Cotización
-                  </Link>
-                </Button>
-                <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
-                  <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="w-5 h-5 mr-2" />
-                    Hablar por WhatsApp
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
-
-            {/* Columna derecha - Lista de beneficios (solo desktop) */}
-            <motion.div 
-              className="hidden lg:flex flex-col gap-4 flex-shrink-0 max-w-md"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              {heroBenefits.map((benefit, index) => (
-                <motion.div
-                  key={benefit.text}
-                  className="flex items-center gap-3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                >
-                  <div className="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
-                    <benefit.icon className="w-5 h-5 text-primary-light" />
-                  </div>
-                  <span className="text-background/90 text-base lg:text-lg">{benefit.text}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof Bar */}
-      <section className="py-8 bg-primary">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-3 gap-4 lg:gap-8 text-center">
-            <motion.div className="text-primary-foreground" initial={{
+    {/* Social Proof Bar */}
+    <section className="py-8 bg-primary">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-3 gap-4 lg:gap-8 text-center">
+          <motion.div className="text-primary-foreground" initial={{
             opacity: 0,
             y: 20
           }} whileInView={{
@@ -182,10 +182,10 @@ const Index = () => {
           }} transition={{
             delay: 0.1
           }}>
-              <p className="text-2xl lg:text-4xl font-bold">{COMPANY.clients}</p>
-              <p className="text-sm lg:text-base text-primary-foreground/80">Clientes satisfechos</p>
-            </motion.div>
-            <motion.div className="text-primary-foreground" initial={{
+            <p className="text-2xl lg:text-4xl font-bold">{COMPANY.clients}</p>
+            <p className="text-sm lg:text-base text-primary-foreground/80">Clientes satisfechos</p>
+          </motion.div>
+          <motion.div className="text-primary-foreground" initial={{
             opacity: 0,
             y: 20
           }} whileInView={{
@@ -196,10 +196,10 @@ const Index = () => {
           }} transition={{
             delay: 0.2
           }}>
-              <p className="text-2xl lg:text-4xl font-bold">{COMPANY.yearsExperience} años</p>
-              <p className="text-sm lg:text-base text-primary-foreground/80">De experiencia</p>
-            </motion.div>
-            <motion.div className="text-primary-foreground" initial={{
+            <p className="text-2xl lg:text-4xl font-bold">{COMPANY.yearsExperience} años</p>
+            <p className="text-sm lg:text-base text-primary-foreground/80">De experiencia</p>
+          </motion.div>
+          <motion.div className="text-primary-foreground" initial={{
             opacity: 0,
             y: 20
           }} whileInView={{
@@ -210,132 +210,132 @@ const Index = () => {
           }} transition={{
             delay: 0.3
           }}>
-              <p className="text-2xl lg:text-4xl font-bold">{COMPANY.insurers}</p>
-              <p className="text-sm lg:text-base text-primary-foreground/80">Aseguradoras aliadas</p>
-            </motion.div>
-          </div>
+            <p className="text-2xl lg:text-4xl font-bold">{COMPANY.insurers}</p>
+            <p className="text-sm lg:text-base text-primary-foreground/80">Aseguradoras aliadas</p>
+          </motion.div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Tu tranquilidad está aquí - NEW SECTION */}
-      <section id="nosotros" className="py-16 lg:py-24 bg-secondary">
-        <div className="container mx-auto px-4">
-          <ScrollReveal className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Tu tranquilidad está aquí, en <span className="text-primary">Seguros Gaete</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Conoce las razones por las que miles de clientes confían en nosotros
-            </p>
-          </ScrollReveal>
+    {/* Tu tranquilidad está aquí - NEW SECTION */}
+    <section id="nosotros" className="py-16 lg:py-24 bg-secondary">
+      <div className="container mx-auto px-4">
+        <ScrollReveal className="text-center mb-12">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            Tu tranquilidad está aquí, en <span className="text-primary">Seguros Gaete</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Conoce las razones por las que miles de clientes confían en nosotros
+          </p>
+        </ScrollReveal>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {tranquilidadBenefits.map((item, index) => <ScrollReveal key={item.highlight} delay={index * 0.05}>
-                <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift">
-                  <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <item.icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-bold text-center mb-2">
-                    <span className="text-primary">{item.highlight}</span>
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground text-center">
-                    {item.description}
-                  </p>
-                </div>
-              </ScrollReveal>)}
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {tranquilidadBenefits.map((item, index) => <ScrollReveal key={item.highlight} delay={index * 0.05}>
+            <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift">
+              <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <item.icon className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-bold text-center mb-2">
+                <span className="text-primary">{item.highlight}</span>
+                {item.title}
+              </h3>
+              <p className="text-sm text-muted-foreground text-center">
+                {item.description}
+              </p>
+            </div>
+          </ScrollReveal>)}
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Nuestros Seguros */}
-      <section id="servicios" className="py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <ScrollReveal className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Seguros Especializados
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Soluciones diseñadas para cada necesidad
-            </p>
-          </ScrollReveal>
+    {/* Nuestros Seguros */}
+    <section id="servicios" className="py-16 lg:py-24">
+      <div className="container mx-auto px-4">
+        <ScrollReveal className="text-center mb-12">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            Seguros Especializados
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Soluciones diseñadas para cada necesidad
+          </p>
+        </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
-            {/* Card 1: Seguro Edificio */}
-            <ScrollReveal delay={0.1}>
-              <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+          {/* Card 1: Seguro Edificio */}
+          <ScrollReveal delay={0.1}>
+            <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
               y: -5
             }}>
-                <div className="h-48 lg:h-56 bg-cover bg-center" style={{
+              <div className="h-48 lg:h-56 bg-cover bg-center" style={{
                 backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800')`
               }} />
-                <div className="p-6 lg:p-8">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Building2 className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl lg:text-2xl font-bold text-card-foreground mb-3">
-                    Seguro para Edificios y Condominios
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    Protege espacios comunes, unidades y responsabilidad civil 
-                    de administradores con cobertura integral.
-                  </p>
-                  <Button asChild className="w-full">
-                    <Link to="/seguros/edificio">
-                      Más información
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
+              <div className="p-6 lg:p-8">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                  <Building2 className="w-6 h-6 text-primary" />
                 </div>
-              </motion.div>
-            </ScrollReveal>
-
-            {/* Card 2: Vida Guardias */}
-            <ScrollReveal delay={0.2}>
-              <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
-              y: -5
-            }}>
-                <div className="h-48 lg:h-56 bg-cover bg-center" style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&q=80&w=800')`
-              }} />
-                <div className="p-6 lg:p-8">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl lg:text-2xl font-bold text-card-foreground mb-3">
-                    Seguro de Vida Guardias (DS-93)
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    Cumple con la normativa legal obligatoria para guardias 
-                    y conserjes según Decreto Supremo 93.
-                  </p>
-                  <Button asChild className="w-full">
-                    <Link to="/seguros/guardias">
-                      Más información
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
-                </div>
-              </motion.div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ¿Por qué Seguros Gaete? */}
-      <section className="py-16 lg:py-24 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <ScrollReveal className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              <AnimatedCounter end={COMPANY.yearsExperience} suffix="+" /> años de experiencia nos respaldan
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Características que nos distinguen en el mercado asegurador
-            </p>
+                <h3 className="text-xl lg:text-2xl font-bold text-card-foreground mb-3">
+                  Seguro para Edificios y Condominios
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  Protege espacios comunes, unidades y responsabilidad civil
+                  de administradores con cobertura integral.
+                </p>
+                <Button asChild className="w-full">
+                  <Link to="/seguros/edificio">
+                    Más información
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
           </ScrollReveal>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {[{
+          {/* Card 2: Vida Guardias */}
+          <ScrollReveal delay={0.2}>
+            <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
+              y: -5
+            }}>
+              <div className="h-48 lg:h-56 bg-cover bg-center" style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&q=80&w=800')`
+              }} />
+              <div className="p-6 lg:p-8">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                  <Shield className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-xl lg:text-2xl font-bold text-card-foreground mb-3">
+                  Seguro de Vida Guardias (DS-93)
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  Cumple con la normativa legal obligatoria para guardias
+                  y conserjes según Decreto Supremo 93.
+                </p>
+                <Button asChild className="w-full">
+                  <Link to="/seguros/guardias">
+                    Más información
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
+
+    {/* ¿Por qué Seguros Gaete? */}
+    <section className="py-16 lg:py-24 bg-muted/30">
+      <div className="container mx-auto px-4">
+        <ScrollReveal className="text-center mb-12">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <AnimatedCounter end={COMPANY.yearsExperience} suffix="+" /> años de experiencia nos respaldan
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Características que nos distinguen en el mercado asegurador
+          </p>
+        </ScrollReveal>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {[{
             icon: <Award className="w-7 h-7" />,
             title: "Trayectoria Comprobada",
             description: "Desde 1987 asesorando a familias y empresas con soluciones de protección a medida",
@@ -356,104 +356,104 @@ const Index = () => {
             description: "Respuesta en menos de 24 horas y acompañamiento cercano cuando más lo necesitas",
             image: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=600"
           }].map((item, index) => <ScrollReveal key={item.title} delay={index * 0.1}>
-                <div className="bg-card rounded-xl overflow-hidden hover-lift border border-border">
-                  <div 
-                    className="h-32 bg-cover bg-center"
-                    style={{ backgroundImage: `url('${item.image}')` }}
-                  />
-                  <div className="p-6 text-center relative">
-                    <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto -mt-12 mb-3 text-primary border-4 border-card">
-                      {item.icon}
-                    </div>
-                    <h3 className="text-lg font-bold text-card-foreground mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </div>
+            <div className="bg-card rounded-xl overflow-hidden hover-lift border border-border">
+              <div
+                className="h-32 bg-cover bg-center"
+                style={{ backgroundImage: `url('${item.image}')` }}
+              />
+              <div className="p-6 text-center relative">
+                <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto -mt-12 mb-3 text-primary border-4 border-card">
+                  {item.icon}
                 </div>
-              </ScrollReveal>)}
-          </div>
+                <h3 className="text-lg font-bold text-card-foreground mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>)}
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Alianzas y Respaldo - Infinite Marquee */}
-      <section className="py-16 lg:py-24 bg-secondary overflow-hidden">
-        <div className="container mx-auto px-4">
-          <ScrollReveal className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Nuestras aseguradoras aliadas
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Trabajamos con las compañías más confiables del mercado
-            </p>
-          </ScrollReveal>
-        </div>
-        
-        <PartnerMarquee />
-      </section>
+    {/* Alianzas y Respaldo - Infinite Marquee */}
+    <section className="py-16 lg:py-24 bg-secondary overflow-hidden">
+      <div className="container mx-auto px-4">
+        <ScrollReveal className="text-center mb-12">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            Nuestras aseguradoras aliadas
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            Trabajamos con las compañías más confiables del mercado
+          </p>
+        </ScrollReveal>
+      </div>
 
-      {/* Nuestro Compromiso */}
-      <section id="compromiso" className="py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <ScrollReveal>
-              <div className="h-64 lg:h-96 rounded-2xl bg-cover bg-center shadow-elevated" style={{
+      <PartnerMarquee />
+    </section>
+
+    {/* Nuestro Compromiso */}
+    <section id="compromiso" className="py-16 lg:py-24">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+          <ScrollReveal>
+            <div className="h-64 lg:h-96 rounded-2xl bg-cover bg-center shadow-elevated" style={{
               backgroundImage: `url('https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&q=80&w=800')`
             }} />
-            </ScrollReveal>
+          </ScrollReveal>
 
-            <ScrollReveal delay={0.2}>
-              <div>
-                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
-                  Nuestro compromiso contigo
-                </h2>
-                
-                <div className="space-y-4">
-                  {[
-                    "Asesoría objetiva e imparcial en la selección de seguros",
-                    "Acompañamiento completo en el proceso de siniestros",
-                    "Actualización constante de tus pólizas según tus necesidades",
-                    "Comunicación clara y transparente en todo momento",
-                    "Gestión ágil de trámites con las aseguradoras"
-                  ].map((item, index) => (
-                    <motion.div 
-                      key={index}
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <CheckCircle className="w-4 h-4 text-primary" />
-                      </div>
-                      <p className="text-muted-foreground">{item}</p>
-                    </motion.div>
-                  ))}
-                </div>
+          <ScrollReveal delay={0.2}>
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                Nuestro compromiso contigo
+              </h2>
 
-                <Button asChild size="lg" className="mt-8">
-                  <Link to="/nosotros">
-                    Conoce nuestra historia
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
+              <div className="space-y-4">
+                {[
+                  "Asesoría objetiva e imparcial en la selección de seguros",
+                  "Acompañamiento completo en el proceso de siniestros",
+                  "Actualización constante de tus pólizas según tus necesidades",
+                  "Comunicación clara y transparente en todo momento",
+                  "Gestión ágil de trámites con las aseguradoras"
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    className="flex items-start gap-3"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="w-4 h-4 text-primary" />
+                    </div>
+                    <p className="text-muted-foreground">{item}</p>
+                  </motion.div>
+                ))}
               </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
 
-      {/* CTA Final */}
-      <CTASection
-        title="¿Necesitas asesoría personalizada?"
-        description="Contáctanos hoy y te ayudamos a encontrar el seguro perfecto para ti"
-        primaryButtonText="Solicitar cotización"
-        primaryButtonLink="/contacto"
-      />
-    </Layout>;
+              <Button asChild size="lg" className="mt-8">
+                <Link to="/nosotros">
+                  Conoce nuestra historia
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
+
+    {/* CTA Final */}
+    <CTASection
+      title="¿Necesitas asesoría personalizada?"
+      description="Contáctanos hoy y te ayudamos a encontrar el seguro perfecto para ti"
+      primaryButtonText="Solicitar cotización"
+      primaryButtonLink="/contacto"
+    />
+  </Layout>;
 };
 
 export default Index;

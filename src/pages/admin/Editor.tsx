@@ -187,7 +187,7 @@ const Editor = () => {
                             src={`/admin/preview/${id}?preview=true`}
                             title="Landing Preview"
                             className="w-full h-full border-0"
-                            key={isDirty ? 'dirty' : 'saved'}
+                            key={JSON.stringify(currentLanding.content)}
                         />
                         {isDirty && (
                             <div className="absolute top-4 right-4 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold shadow border border-yellow-300 pointer-events-none">
@@ -203,5 +203,6 @@ const Editor = () => {
 
 // Quick helper icon for open link
 import { ExternalLink } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default Editor;

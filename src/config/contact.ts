@@ -45,8 +45,8 @@ export const CONTACT = {
 export const COMPANY = {
   name: 'Seguros Gaete',
   fullName: 'Seguros Gaete Corredores de Seguros',
-  tagline: 'Más de 35 años protegiendo tu tranquilidad',
-  foundedYear: 1987,
+  tagline: 'Siempre protegiendo tu tranquilidad',
+  foundedYear: 1986,
   yearsExperience: new Date().getFullYear() - 1987,
   clients: '1,200+',
   insurers: '23+',
