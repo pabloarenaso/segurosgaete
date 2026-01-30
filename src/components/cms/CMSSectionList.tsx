@@ -3,6 +3,9 @@ import * as LucideIcons from "lucide-react";
 import { CheckCircle2 } from "lucide-react";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 
+import { useRef } from "react";
+import { useAutoScroll } from "@/hooks/useAutoScroll";
+
 interface CMSSectionListProps {
     data: LandingContent;
     type: 'coverages' | 'benefits';
@@ -11,6 +14,9 @@ interface CMSSectionListProps {
 const CMSSectionList = ({ data, type }: CMSSectionListProps) => {
     const section = type === 'coverages' ? data.coverages : data.benefits;
     const isBenefits = type === 'benefits';
+    const containerRef = useRef<HTMLDivElement>(null);
+    useAutoScroll(containerRef, 10000);
+
     // Coverages usually 3-column cards, Benefits maybe list or items
     // Let's use a similar responsive grid for both, styled accordingly.
 
@@ -24,13 +30,13 @@ const CMSSectionList = ({ data, type }: CMSSectionListProps) => {
                     <p className="text-muted-foreground">{section.subtitle}</p>
                 </ScrollReveal>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div ref={containerRef} className="flex lg:grid lg:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto lg:overflow-x-visible pb-6 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
                     {section.items.map((item, index) => {
                         const IconComponent = (LucideIcons as any)[item.icon] || CheckCircle2;
 
                         return (
-                            <ScrollReveal key={item.id || index} delay={index * 0.1} className="h-full">
-                                <div className={`h-full bg-white p-8 rounded-xl border ${(item as any).recommended ? 'border-blue-500 ring-2 ring-blue-500 ring-opacity-20' : 'border-border'} hover-lift transition-all shadow-sm hover:shadow-md relative`}>
+                            <ScrollReveal key={item.id || index} delay={index * 0.1} className="flex-shrink-0 w-[85%] md:w-[48%] lg:w-full snap-start h-auto lg:h-full">
+                                <div className={`h-full bg-white p-6 md:p-8 rounded-xl border ${(item as any).recommended ? 'border-blue-500 ring-2 ring-blue-500 ring-opacity-20' : 'border-border'} hover-lift transition-all shadow-sm hover:shadow-md relative flex flex-col`}>
                                     {(item as any).recommended && (
                                         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gaete-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                                             Recomendado
@@ -63,6 +69,11 @@ const CMSSectionList = ({ data, type }: CMSSectionListProps) => {
                             </ScrollReveal>
                         );
                     })}
+                </div>
+                <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+                    {section.items.map((_, i) => (
+                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+                    ))}
                 </div>
             </div>
         </section>

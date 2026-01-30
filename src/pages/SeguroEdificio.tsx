@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useAutoScroll } from '@/hooks/useAutoScroll';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -115,6 +116,9 @@ const SeguroEdificio = () => {
   const nextStep = () => currentStep < totalSteps && setCurrentStep(currentStep + 1);
   const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
+  const benefitsRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(benefitsRef, 10000);
+
   return (
     <Layout>
       <HeroWithForm
@@ -133,7 +137,7 @@ const SeguroEdificio = () => {
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Qué protege este seguro?</h2>
             <p className="text-muted-foreground">Cobertura integral para tu edificio o condominio</p>
           </ScrollReveal>
-          <div className="flex lg:grid lg:grid-cols-3 gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
+          <div ref={benefitsRef} className="flex lg:grid lg:grid-cols-3 gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
             {benefits.map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 0.1} className="flex-shrink-0 w-[85%] sm:w-[45%] lg:w-full snap-start h-full">
                 <div className="bg-card rounded-xl p-6 border border-border hover-lift h-full flex flex-col">
@@ -152,7 +156,7 @@ const SeguroEdificio = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       <WhyChooseUs />
 
@@ -165,7 +169,7 @@ const SeguroEdificio = () => {
       <ResourcesSection />
 
       <CTASection primaryButtonLink="/seguros/guardias" primaryButtonText="Ver otros seguros" />
-    </Layout>
+    </Layout >
   );
 };
 

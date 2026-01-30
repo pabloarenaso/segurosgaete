@@ -1,7 +1,9 @@
+
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network, Percent, FileText } from 'lucide-react';
+import { useAutoScroll } from '@/hooks/useAutoScroll';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import CTASection from '@/components/shared/CTASection';
@@ -136,39 +138,41 @@ const Index = () => {
                 <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Hablar por WhatsApp
-                </a>
-              </Button>
-            </div>
-          </motion.div>
+                </a >
+              </Button >
+            </div >
+          </motion.div >
 
           {/* Columna derecha - Lista de beneficios (solo desktop) */}
-          <motion.div
+          < motion.div
             className="hidden lg:flex flex-col gap-4 flex-shrink-0 max-w-md"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {heroBenefits.map((benefit, index) => (
-              <motion.div
-                key={benefit.text}
-                className="flex items-center gap-3"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-              >
-                <div className="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
-                  <benefit.icon className="w-5 h-5 text-primary-light" />
-                </div>
-                <span className="text-background/90 text-base lg:text-lg">{benefit.text}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-    </section>
+            {
+              heroBenefits.map((benefit, index) => (
+                <motion.div
+                  key={benefit.text}
+                  className="flex items-center gap-3"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                >
+                  <div className="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
+                    <benefit.icon className="w-5 h-5 text-primary-light" />
+                  </div>
+                  <span className="text-background/90 text-base lg:text-lg">{benefit.text}</span>
+                </motion.div>
+              ))
+            }
+          </motion.div >
+        </div >
+      </div >
+    </section >
 
     {/* Social Proof Bar */}
-    <section className="py-8 bg-primary">
+    < section className="py-8 bg-primary" >
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-3 gap-4 lg:gap-8 text-center">
           <motion.div className="text-primary-foreground" initial={{
@@ -215,10 +219,10 @@ const Index = () => {
           </motion.div>
         </div>
       </div>
-    </section>
+    </section >
 
     {/* Tu tranquilidad está aquí - NEW SECTION */}
-    <section id="nosotros" className="py-16 lg:py-24 bg-secondary">
+    < section id="nosotros" className="py-16 lg:py-24 bg-secondary" >
       <div className="container mx-auto px-4">
         <ScrollReveal className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -229,29 +233,36 @@ const Index = () => {
           </p>
         </ScrollReveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tranquilidadBenefits.map((item, index) => <ScrollReveal key={item.highlight} delay={index * 0.05}>
-            <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift flex flex-row lg:flex-col items-center lg:text-center gap-4">
-              <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center flex-shrink-0 lg:mb-4">
-                <item.icon className="w-8 h-8 text-primary" />
+        <div className="flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
+          {tranquilidadBenefits.map((item, index) => (
+            <ScrollReveal key={item.highlight} delay={index * 0.05} className="flex-shrink-0 w-[85%] sm:w-[45%] lg:w-full snap-start h-full">
+              <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift flex flex-row lg:flex-col items-center lg:text-center gap-4">
+                <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center flex-shrink-0 lg:mb-4">
+                  <item.icon className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold mb-2">
+                    <span className="text-primary">{item.highlight}</span>
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-bold mb-2">
-                  <span className="text-primary">{item.highlight}</span>
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-          </ScrollReveal>)}
+            </ScrollReveal>
+          ))}
+        </div>
+        <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+          {tranquilidadBenefits.map((_, i) => (
+            <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+          ))}
         </div>
       </div>
-    </section>
+    </section >
 
     {/* Nuestros Seguros */}
-    <section id="servicios" className="py-16 lg:py-24">
+    < section id="servicios" className="py-16 lg:py-24" >
       <div className="container mx-auto px-4">
         <ScrollReveal className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -322,10 +333,10 @@ const Index = () => {
           </ScrollReveal>
         </div>
       </div>
-    </section>
+    </section >
 
     {/* ¿Por qué Seguros Gaete? */}
-    <section className="py-16 lg:py-24 bg-muted/30">
+    < section className="py-16 lg:py-24 bg-muted/30" >
       <div className="container mx-auto px-4">
         <ScrollReveal className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -378,10 +389,10 @@ const Index = () => {
           </ScrollReveal>)}
         </div>
       </div>
-    </section>
+    </section >
 
     {/* Alianzas y Respaldo - Infinite Marquee */}
-    <section className="py-16 lg:py-24 bg-secondary overflow-hidden">
+    < section className="py-16 lg:py-24 bg-secondary overflow-hidden" >
       <div className="container mx-auto px-4">
         <ScrollReveal className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -394,10 +405,10 @@ const Index = () => {
       </div>
 
       <PartnerMarquee />
-    </section>
+    </section >
 
     {/* Nuestro Compromiso */}
-    <section id="compromiso" className="py-16 lg:py-24">
+    < section id="compromiso" className="py-16 lg:py-24" >
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           <ScrollReveal>
@@ -446,16 +457,16 @@ const Index = () => {
           </ScrollReveal>
         </div>
       </div>
-    </section>
+    </section >
 
     {/* CTA Final */}
-    <CTASection
+    < CTASection
       title="¿Necesitas asesoría personalizada?"
       description="Contáctanos hoy y te ayudamos a encontrar el seguro perfecto para ti"
       primaryButtonText="Solicitar cotización"
       primaryButtonLink="/contacto"
     />
-  </Layout>;
+  </Layout >;
 };
 
 export default Index;

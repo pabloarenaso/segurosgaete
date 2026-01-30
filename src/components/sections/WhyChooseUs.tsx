@@ -53,7 +53,13 @@ const differentiators = [
     }
 ];
 
+import { useRef } from 'react';
+import { useAutoScroll } from '@/hooks/useAutoScroll';
+
 const WhyChooseUs = () => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    useAutoScroll(scrollRef, 10000);
+
     return (
         <section className="py-16 lg:py-24 bg-slate-50">
             <div className="container mx-auto px-4">
@@ -66,7 +72,7 @@ const WhyChooseUs = () => {
                     </p>
                 </ScrollReveal>
 
-                <div className="flex lg:grid lg:grid-cols-4 gap-8 overflow-x-auto lg:overflow-x-visible pb-6 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
+                <div ref={scrollRef} className="flex lg:grid lg:grid-cols-4 gap-8 overflow-x-auto lg:overflow-x-visible pb-6 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
                     {differentiators.map((item, index) => (
                         <ScrollReveal key={index} delay={index * 0.1} className="flex-shrink-0 w-[85%] sm:w-[45%] lg:w-full snap-start h-full">
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full hover:shadow-md transition-shadow flex flex-col">
