@@ -66,11 +66,11 @@ const WhyChooseUs = () => {
                     </p>
                 </ScrollReveal>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="flex lg:grid lg:grid-cols-4 gap-8 overflow-x-auto lg:overflow-x-visible pb-6 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
                     {differentiators.map((item, index) => (
-                        <ScrollReveal key={index} delay={index * 0.1}>
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full hover:shadow-md transition-shadow">
-                                <div className="w-12 h-12 bg-gaete-primary/10 rounded-xl flex items-center justify-center mb-4 text-gaete-primary">
+                        <ScrollReveal key={index} delay={index * 0.1} className="flex-shrink-0 w-[85%] sm:w-[45%] lg:w-full snap-start h-full">
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full hover:shadow-md transition-shadow flex flex-col">
+                                <div className="w-12 h-12 bg-gaete-primary/10 rounded-xl flex items-center justify-center mb-4 text-gaete-primary flex-shrink-0">
                                     <item.icon className="w-6 h-6" />
                                 </div>
                                 <h3 className="font-heading font-bold text-xl text-gray-900 mb-2">
@@ -81,6 +81,11 @@ const WhyChooseUs = () => {
                                 </p>
                             </div>
                         </ScrollReveal>
+                    ))}
+                </div>
+                <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+                    {differentiators.map((_, i) => (
+                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
                     ))}
                 </div>
             </div>

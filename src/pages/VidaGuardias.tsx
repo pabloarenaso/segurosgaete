@@ -131,17 +131,22 @@ const VidaGuardias = () => {
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Qué protege este seguro?</h2>
             <p className="text-muted-foreground">Cumplimiento legal y protección para tu equipo</p>
           </ScrollReveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex lg:grid lg:grid-cols-3 gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
             {benefits.map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.1}>
-                <div className="bg-card rounded-xl p-6 border border-border hover-lift">
-                  <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mb-4">
+              <ScrollReveal key={item.title} delay={i * 0.1} className="flex-shrink-0 w-[85%] sm:w-[45%] lg:w-full snap-start h-full">
+                <div className="bg-card rounded-xl p-6 border border-border hover-lift h-full flex flex-col">
+                  <div className="w-14 h-14 bg-primary-light/30 rounded-full flex items-center justify-center mb-4 flex-shrink-0">
                     <item.icon className="w-7 h-7 text-primary" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
               </ScrollReveal>
+            ))}
+          </div>
+          <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+            {benefits.map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
             ))}
           </div>
         </div>
