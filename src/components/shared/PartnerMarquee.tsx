@@ -1,7 +1,25 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { INSURANCE_PARTNERS } from '@/config/contact';
 
 const PartnerMarquee = () => {
+  const [duration, setDuration] = useState(40);
+
+  useEffect(() => {
+    const updateDuration = () => {
+      // Shorter duration = faster animation
+      if (window.innerWidth < 1024) {
+        setDuration(22); // Much faster for mobile/tablet
+      } else {
+        setDuration(35); // Slightly faster for desktop too
+      }
+    };
+
+    updateDuration();
+    window.addEventListener('resize', updateDuration);
+    return () => window.removeEventListener('resize', updateDuration);
+  }, []);
+
   // Duplicate the array for seamless infinite scroll
   const duplicatedPartners = [...INSURANCE_PARTNERS, ...INSURANCE_PARTNERS];
 
@@ -14,7 +32,7 @@ const PartnerMarquee = () => {
         }}
         transition={{
           x: {
-            duration: 40,
+            duration: duration,
             repeat: Infinity,
             ease: 'linear',
           },
