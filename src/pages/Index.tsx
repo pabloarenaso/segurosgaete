@@ -231,17 +231,19 @@ const Index = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {tranquilidadBenefits.map((item, index) => <ScrollReveal key={item.highlight} delay={index * 0.05}>
-            <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift">
-              <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift flex flex-row lg:flex-col items-center lg:text-center gap-4">
+              <div className="w-16 h-16 bg-primary-light/30 rounded-full flex items-center justify-center flex-shrink-0 lg:mb-4">
                 <item.icon className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-lg font-bold text-center mb-2">
-                <span className="text-primary">{item.highlight}</span>
-                {item.title}
-              </h3>
-              <p className="text-sm text-muted-foreground text-center">
-                {item.description}
-              </p>
+              <div>
+                <h3 className="text-lg font-bold mb-2">
+                  <span className="text-primary">{item.highlight}</span>
+                  {item.title}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
             </div>
           </ScrollReveal>)}
         </div>

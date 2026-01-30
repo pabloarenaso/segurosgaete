@@ -36,13 +36,13 @@ const CMSSectionList = ({ data, type }: CMSSectionListProps) => {
                                             Recomendado
                                         </div>
                                     )}
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${isBenefits ? 'bg-primary-light/30 text-gaete-primary' : 'bg-blue-100 text-blue-600'}`}>
-                                            <IconComponent size={24} />
+                                    <div className="flex flex-row lg:flex-col items-center lg:items-start lg:text-left gap-4 mb-4 lg:mb-6">
+                                        <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center flex-shrink-0 ${isBenefits ? 'bg-primary-light/30 text-gaete-primary' : 'bg-blue-100 text-blue-600'}`}>
+                                            <IconComponent className="w-6 h-6 lg:w-7 lg:h-7" />
                                         </div>
-                                        <h3 className="text-xl font-heading font-bold text-foreground leading-tight">{item.title}</h3>
+                                        <h3 className="text-xl font-heading font-bold text-foreground leading-tight lg:mt-2">{item.title}</h3>
                                     </div>
-                                    <p className="text-muted-foreground text-sm mb-6 leading-relaxed">{item.description}</p>
+                                    <p className="text-muted-foreground text-sm mb-6 leading-relaxed flex-1">{(item as any).description}</p>
 
                                     {!isBenefits && (item as any).price && (
                                         <div className="mt-auto pt-4 border-t border-gray-100">
