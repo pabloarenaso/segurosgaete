@@ -24,7 +24,7 @@
 
     /* Primary Light: #97D4D4 → HSL(180, 43%, 72%) */
     --primary-light: 180 43% 72%;
-    
+
     /* Primary Medium: #90C3CC → HSL(189, 35% 68%) */
     --primary-medium: 189 35% 68%;
 
@@ -102,12 +102,16 @@
   }
 
   /* Touch-friendly inputs for mobile */
-  input, select, textarea, button {
+  input,
+  select,
+  textarea,
+  button {
     @apply min-h-[48px];
   }
 }
 
 @layer utilities {
+
   /* Gradient backgrounds */
   .bg-gradient-primary {
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-medium)) 100%);
@@ -142,17 +146,16 @@
   }
 
   /* Hover effects */
-  @layer utilities {
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-}
 
-.hover-lift {
+  .hover-lift {
     @apply transition-all duration-300;
   }
 
