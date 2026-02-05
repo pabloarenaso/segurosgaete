@@ -34,6 +34,11 @@ const DynamicHeroWithForm = ({ data, previewMode = false }: DynamicHeroWithFormP
         const s1: FormField[] = [];
         const s2: FormField[] = [];
 
+        // If Step 2 is explicitly disabled, put everything in Step 1
+        if (!formConfig.enableStep2) {
+            return { step1Fields: formConfig.fields, step2Fields: [] };
+        }
+
         // Enhanced Logic: Check if explicit 'step' property exists
         const hasExplicitSteps = formConfig.fields.some(f => f.step !== undefined);
 
@@ -66,9 +71,8 @@ const DynamicHeroWithForm = ({ data, previewMode = false }: DynamicHeroWithFormP
             return { step1Fields: s2.slice(0, 3), step2Fields: s2.slice(3) };
         }
 
-        // Fallback: If s2 is empty, everything is in s1 (Single step)
         return { step1Fields: s1, step2Fields: s2 };
-    }, [formConfig.fields]);
+    }, [formConfig.fields, formConfig.enableStep2]);
 
     const hasStep2 = step2Fields.length > 0;
     const totalSteps = hasStep2 ? 2 : 1;

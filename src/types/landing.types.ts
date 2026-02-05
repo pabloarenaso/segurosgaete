@@ -27,6 +27,9 @@ export interface HeroSection {
 export interface FormSection {
     title: string;
     fields: FormField[];
+    enableStep2?: boolean;
+    emailTo?: string;
+    successMessage?: string;
 }
 
 export interface FormField {

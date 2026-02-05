@@ -79,12 +79,52 @@ const FormEditor = () => {
 
     return (
         <div className="space-y-6">
-            <div className="space-y-2">
-                <Label>Título del Formulario</Label>
-                <Input
-                    value={form.title}
-                    onChange={(e) => updateFormTitle(e.target.value)}
-                />
+            <div className="space-y-4 border p-4 rounded-lg bg-gray-50">
+                <Label className="text-base font-semibold">Configuración General</Label>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label>Título del Formulario</Label>
+                        <Input
+                            value={form.title}
+                            onChange={(e) => updateFormTitle(e.target.value)}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Email de Destino</Label>
+                        <Input
+                            value={form.emailTo || ''}
+                            onChange={(e) => updateLanding({
+                                content: { ...currentLanding.content, form: { ...form, emailTo: e.target.value } }
+                            })}
+                            placeholder="contacto@segurosgaete.cl"
+                        />
+                        <p className="text-xs text-muted-foreground">Por defecto: contacto@segurosgaete.cl</p>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <Label>Respuesta Automática (Body del Email)</Label>
+                    <Textarea
+                        value={form.successMessage || ''}
+                        onChange={(e) => updateLanding({
+                            content: { ...currentLanding.content, form: { ...form, successMessage: e.target.value } }
+                        })}
+                        placeholder="Mensaje genérico que le llegará al usuario..."
+                        rows={2}
+                    />
+                </div>
+
+                <div className="flex items-center space-x-2 pt-2">
+                    <Checkbox
+                        id="enableStep2"
+                        checked={form.enableStep2 || false}
+                        onCheckedChange={(checked) => updateLanding({
+                            content: { ...currentLanding.content, form: { ...form, enableStep2: !!checked } }
+                        })}
+                    />
+                    <Label htmlFor="enableStep2" className="cursor-pointer">Habilitar Paso 2 (Formulario Multi-paso)</Label>
+                </div>
             </div>
 
             <div className="space-y-4">
@@ -140,21 +180,23 @@ const FormEditor = () => {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="col-span-12 md:col-span-3 space-y-2">
-                                    <Label>Paso</Label>
-                                    <Select
-                                        value={field.step?.toString() || "1"}
-                                        onValueChange={(val) => updateField(index, { step: parseInt(val) })}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="1">Paso 1</SelectItem>
-                                            <SelectItem value="2">Paso 2</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                {form.enableStep2 && (
+                                    <div className="col-span-12 md:col-span-3 space-y-2">
+                                        <Label>Paso</Label>
+                                        <Select
+                                            value={field.step?.toString() || "1"}
+                                            onValueChange={(val) => updateField(index, { step: parseInt(val) })}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="1">Paso 1</SelectItem>
+                                                <SelectItem value="2">Paso 2</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="space-y-2">
