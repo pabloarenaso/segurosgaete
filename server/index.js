@@ -22,6 +22,11 @@ app.use(cors({
     credentials: true
 }));
 
+// Serve Static Files (Crucial for images/resources)
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
+app.use('/data', express.static(path.join(__dirname, '../public/data')));
+app.use('/resources', express.static(path.join(__dirname, '../public/resources')));
+
 // Logging middleware (after body parser)
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
