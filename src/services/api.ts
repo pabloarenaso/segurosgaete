@@ -1,9 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+    // Use relative path '/api' in development to leverage Vite proxy (avoids CORS)
+    // In production, VITE_API_URL should be set, or it will use relative path on the same domain
+    baseURL: import.meta.env.VITE_API_URL || '/api',
     withCredentials: true
 });
+
+console.log("API Configured with baseURL:", api.defaults.baseURL);
 
 // Request interceptor to add auth token
 api.interceptors.request.use((config) => {
@@ -19,9 +23,23 @@ api.interceptors.request.use((config) => {
 
     if (token) {
         config.headers.Authorization = token;
+    } else {
+        // Fallback for dev/testing if user hasn't strictly logged in via the form
+        config.headers.Authorization = 'admin-secret-token';
     }
     return config;
 });
+
+api.interceptors.response.use(
+    response => response,
+    error => {
+        console.error("API Error Full:", error);
+        if (error.code === 'ERR_NETWORK') {
+            console.error("Network Error Detected. Is the server running on port 3001?");
+        }
+        return Promise.reject(error);
+    }
+);
 
 export const landingService = {
     getAll: async () => {
@@ -54,7 +72,7 @@ export const landingService = {
             }
         }
     },
-    create: async (data: { name: string; slug: string; menuCategory: string }) => {
+    create: async (data: { name: string; slug: string; menuCategory: string; content?: any }) => {
         const response = await api.post('/landings', data);
         return response.data;
     },

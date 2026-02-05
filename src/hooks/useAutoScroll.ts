@@ -1,6 +1,36 @@
 import { useEffect, RefObject } from 'react';
 
 export const useAutoScroll = (containerRef: RefObject<HTMLDivElement>, interval = 10000) => {
+
+    const scrollNext = () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const cardWidth = container.firstElementChild?.clientWidth || 0;
+        const scrollAmount = cardWidth + 10; // Match the auto-scroll amount
+        const maxScroll = container.scrollWidth - container.clientWidth;
+
+        if (container.scrollLeft >= maxScroll - 10) {
+            container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    };
+
+    const scrollPrev = () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const cardWidth = container.firstElementChild?.clientWidth || 0;
+        const scrollAmount = cardWidth + 10;
+
+        if (container.scrollLeft <= 10) {
+            container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+        } else {
+            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        }
+    };
+
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
@@ -27,4 +57,6 @@ export const useAutoScroll = (containerRef: RefObject<HTMLDivElement>, interval 
         const timer = setInterval(autoScroll, interval);
         return () => clearInterval(timer);
     }, [containerRef, interval]);
+
+    return { scrollNext, scrollPrev };
 };

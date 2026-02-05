@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Middleware
 app.use(helmet());
@@ -21,6 +21,15 @@ app.use(cors({
     origin: ['http://localhost:5173', 'http://localhost:8080', 'http://127.0.0.1:5173', 'http://127.0.0.1:8080'],
     credentials: true
 }));
+
+// Logging middleware (after body parser)
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    if (req.body && Object.keys(req.body).length > 0) {
+        console.log('Body:', JSON.stringify(req.body, null, 2));
+    }
+    next();
+});
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -145,6 +154,7 @@ app.post('/api/landings', requireAuth, async (req, res) => {
             name,
             slug,
             menuCategory: menuCategory || '',
+            isFeatured: req.body.isFeatured === true || req.body.isFeatured === 'true',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             content: {
@@ -176,17 +186,24 @@ app.post('/api/landings', requireAuth, async (req, res) => {
             id,
             name,
             slug,
+            isFeatured: newLanding.isFeatured,
             createdAt: newLanding.createdAt,
-            updatedAt: newLanding.updatedAt
+            createdAt: newLanding.createdAt,
+            updatedAt: newLanding.updatedAt,
+            content: { hero: newLanding.content.hero }
         });
         await fs.writeFile(indexPath, JSON.stringify(indexData, null, 2));
 
-        await updateMenu('add', newLanding);
+        try {
+            await updateMenu('add', newLanding);
+        } catch (menuError) {
+            console.error("Menu update failed, but landing created:", menuError);
+        }
 
         res.json(newLanding);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to create landing' });
+        res.status(500).json({ error: 'Failed to create landing', details: error.message });
     }
 });
 
@@ -208,13 +225,19 @@ app.put('/api/landings/:id', requireAuth, async (req, res) => {
             ...existingLanding,
             ...updates,
             id,
+            isFeatured: updates.isFeatured === true || updates.isFeatured === 'true',
             updatedAt: new Date().toISOString()
         };
 
         await fs.writeFile(filePath, JSON.stringify(updatedLanding, null, 2));
 
         const indexPath = path.join(__dirname, '../public/data/landings/index.json');
-        let indexData = JSON.parse(await fs.readFile(indexPath, 'utf-8'));
+        let indexData = [];
+        try {
+            indexData = JSON.parse(await fs.readFile(indexPath, 'utf-8'));
+        } catch (e) {
+            console.warn("Index file corrupt or missing during update, checking individual file only.");
+        }
 
         const indexIndex = indexData.findIndex(l => l.id === id);
         if (indexIndex >= 0) {
@@ -222,17 +245,25 @@ app.put('/api/landings/:id', requireAuth, async (req, res) => {
                 ...indexData[indexIndex],
                 name: updatedLanding.name,
                 slug: updatedLanding.slug,
-                updatedAt: updatedLanding.updatedAt
+                isFeatured: updatedLanding.isFeatured,
+                slug: updatedLanding.slug,
+                isFeatured: updatedLanding.isFeatured,
+                updatedAt: updatedLanding.updatedAt,
+                content: { hero: updatedLanding.content.hero }
             };
             await fs.writeFile(indexPath, JSON.stringify(indexData, null, 2));
         }
 
-        await updateMenu('update', updatedLanding);
+        try {
+            await updateMenu('update', updatedLanding);
+        } catch (menuError) {
+            console.error("Menu update failed, but landing updated:", menuError);
+        }
 
         res.json(updatedLanding);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to update landing' });
+        res.status(500).json({ error: 'Failed to update landing', details: error.message });
     }
 });
 

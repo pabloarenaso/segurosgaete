@@ -6,13 +6,15 @@ import WhatsAppButton from '@/components/shared/WhatsAppButton';
 
 interface LayoutProps {
   children: ReactNode;
+  hideHeader?: boolean;
+  hideFooter?: boolean;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, hideHeader = false, hideFooter = false }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <motion.main 
+      {!hideHeader && <Header />}
+      <motion.main
         className="flex-1"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -20,8 +22,8 @@ const Layout = ({ children }: LayoutProps) => {
       >
         {children}
       </motion.main>
-      <Footer />
-      <WhatsAppButton />
+      {!hideFooter && <Footer />}
+      {!hideFooter && <WhatsAppButton />}
     </div>
   );
 };

@@ -3,6 +3,7 @@ export interface Landing {
     name: string;
     slug: string;
     menuCategory: string;
+    isFeatured?: boolean; // New field for featured landings
     createdAt: string;
     updatedAt: string;
     content: LandingContent;
@@ -35,6 +36,7 @@ export interface FormField {
     required: boolean;
     placeholder?: string;
     options?: string[]; // For select types
+    step?: number; // New field: 1 or 2
 }
 
 export interface CoveragesSection {

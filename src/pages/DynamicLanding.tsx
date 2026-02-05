@@ -13,25 +13,50 @@ import { LandingContent } from '@/types/landing.types';
 interface DynamicLandingProps {
     landingId?: string; // Public ID passed by Router
     previewId?: string; // Admin Preview ID
+    landingData?: LandingContent; // Direct data for real-time preview
 }
 
-const DynamicLanding = ({ landingId, previewId }: DynamicLandingProps) => {
+const DynamicLanding = ({ landingId, previewId, landingData }: DynamicLandingProps) => {
     // If used as specific route with ID (Preview)
     const { id } = useParams<{ id: string }>();
 
     // Priority: Preview Prop > Landing Prop > URL Param
     const effectiveId = previewId || landingId || id;
 
-    // Preview Mode triggered explicitly by previewId prop or valid URL param
+    // Preview Mode triggered explicitly by previewId/landingData prop or valid URL param
     const searchParams = new URLSearchParams(window.location.search);
-    const isPreview = !!previewId || searchParams.get('preview') === 'true';
+    const isPreview = !!previewId || !!landingData || searchParams.get('preview') === 'true';
 
     const { data: landing, isLoading, isError } = useQuery({
         queryKey: ['landing', effectiveId],
         queryFn: () => landingService.getById(effectiveId!),
-        enabled: !!effectiveId,
+        enabled: !!effectiveId && !landingData, // Don't fetch if we have direct data
         retry: false
     });
+
+    if (landingData) {
+        // Direct render mode (Real-time editor preview)
+        return (
+            <div className="bg-white min-h-full">
+                {/* No Layout wrapper for preview inside editor to avoid double header/footer if desired, 
+                     but user probably wants full context. Let's keep Layout but maybe cleaner?
+                     Actually, inside the small iframe-like div, Layout might be too much if it has fixed headers.
+                     Let's check Layout usage. existing code used Layout. 
+                     The user complaint was about "updating title not reflected".
+                     Let's use Layout to be consistent with real site.
+                 */}
+                <Layout hideHeader={true} hideFooter={true}>
+                    <div className="relative">
+                        <DynamicHeroWithForm data={landingData} previewMode={isPreview} />
+                        <CMSSectionList data={landingData} type="coverages" />
+                        <CMSSectionList data={landingData} type="benefits" />
+                        <CMSFAQSection data={landingData} />
+                        <CMSResourcesSection data={landingData} />
+                    </div>
+                </Layout>
+            </div>
+        );
+    }
 
     if (isLoading) {
         return (
@@ -55,7 +80,7 @@ const DynamicLanding = ({ landingId, previewId }: DynamicLandingProps) => {
     const { content } = landing;
 
     return (
-        <Layout>
+        <Layout hideHeader={isPreview}>
             <div className="relative">
                 {isPreview && (
                     <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-2">

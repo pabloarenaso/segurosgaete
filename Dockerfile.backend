@@ -1,0 +1,23 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy server code and public template
+COPY server ./server
+COPY public ./public
+
+# Create necessary directories for persistence if they don't exist
+# These will be overlaid by volumes in production
+RUN mkdir -p public/data/landings public/images/uploads public/resources
+
+# Expose port 3002
+EXPOSE 3002
+
+# Run the server
+CMD ["node", "server/index.js"]

@@ -7,6 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useEditorStore } from "@/store/editorStore";
 import { FormField } from "@/types/landing.types";
 
+import { Button } from "@/components/ui/button";
+import { Plus, Trash2 } from "lucide-react";
+
 const FIELD_TYPES = [
     { value: "text", label: "Texto" },
     { value: "email", label: "Email" },
@@ -41,6 +44,33 @@ const FormEditor = () => {
         });
     };
 
+    const addField = () => {
+        const newField: FormField = {
+            id: `field_${Date.now()}`,
+            label: "Nuevo Campo",
+            type: "text",
+            required: false,
+            step: 1
+        };
+
+        updateLanding({
+            content: {
+                ...currentLanding.content,
+                form: { ...form, fields: [...form.fields, newField] }
+            }
+        });
+    };
+
+    const removeField = (index: number) => {
+        const newFields = form.fields.filter((_, i) => i !== index);
+        updateLanding({
+            content: {
+                ...currentLanding.content,
+                form: { ...form, fields: newFields }
+            }
+        });
+    };
+
     const handleOptionsChange = (index: number, val: string) => {
         // Split by comma or newline
         const options = val.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
@@ -63,7 +93,18 @@ const FormEditor = () => {
                     <Card key={field.id || index} className="bg-slate-50">
                         <CardContent className="p-4 space-y-4">
                             <div className="flex items-start justify-between">
-                                <span className="text-xs font-mono text-muted-foreground">Campo {index + 1} ({field.id})</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-mono text-muted-foreground">ID: {field.id}</span>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                        onClick={() => removeField(index)}
+                                        title="Eliminar campo"
+                                    >
+                                        <Trash2 size={14} />
+                                    </Button>
+                                </div>
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
                                         id={`req-${index}`}
@@ -74,8 +115,8 @@ const FormEditor = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
+                            <div className="grid grid-cols-12 gap-4">
+                                <div className="col-span-12 md:col-span-5 space-y-2">
                                     <Label>Etiqueta</Label>
                                     <Input
                                         value={field.label}
@@ -83,7 +124,7 @@ const FormEditor = () => {
                                         placeholder="Label del campo"
                                     />
                                 </div>
-                                <div className="space-y-2">
+                                <div className="col-span-12 md:col-span-4 space-y-2">
                                     <Label>Tipo</Label>
                                     <Select
                                         value={field.type}
@@ -96,6 +137,21 @@ const FormEditor = () => {
                                             {FIELD_TYPES.map(t => (
                                                 <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
                                             ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="col-span-12 md:col-span-3 space-y-2">
+                                    <Label>Paso</Label>
+                                    <Select
+                                        value={field.step?.toString() || "1"}
+                                        onValueChange={(val) => updateField(index, { step: parseInt(val) })}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="1">Paso 1</SelectItem>
+                                            <SelectItem value="2">Paso 2</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -123,6 +179,10 @@ const FormEditor = () => {
                         </CardContent>
                     </Card>
                 ))}
+
+                <Button variant="outline" onClick={addField} className="w-full gap-2 border-dashed">
+                    <Plus size={16} /> Agregar Campo
+                </Button>
             </div>
         </div>
     );

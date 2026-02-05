@@ -31,15 +31,29 @@ const DynamicHeroWithForm = ({ data, previewMode = false }: DynamicHeroWithFormP
     // Step 1: Contact info (Name, Email, Phone, Company, Role)
     // Step 2: Details (Rut, Address, Units, etc)
     const { step1Fields, step2Fields } = useMemo(() => {
-        const contactKeywords = ['name', 'nombre', 'email', 'mail', 'phone', 'telefono', 'teléfono', 'company', 'empresa', 'cargo', 'position'];
-
         const s1: FormField[] = [];
         const s2: FormField[] = [];
 
+        // Enhanced Logic: Check if explicit 'step' property exists
+        const hasExplicitSteps = formConfig.fields.some(f => f.step !== undefined);
+
+        if (hasExplicitSteps) {
+            formConfig.fields.forEach(field => {
+                if (field.step === 2) {
+                    s2.push(field);
+                } else {
+                    // Default to step 1
+                    s1.push(field);
+                }
+            });
+            return { step1Fields: s1, step2Fields: s2 };
+        }
+
+        // Backward Compatibility (Keyword matching)
+        const contactKeywords = ['name', 'nombre', 'email', 'mail', 'phone', 'telefono', 'teléfono', 'company', 'empresa', 'cargo', 'position'];
+
         formConfig.fields.forEach(field => {
             const idLower = field.id.toLowerCase();
-            // Check if id matches keywords OR if it's one of the first 3 fields if no keywords match?
-            // Let's rely on keywords for now, or fallback to filling step 1 first.
             if (contactKeywords.some(k => idLower.includes(k))) {
                 s1.push(field);
             } else {
@@ -118,7 +132,8 @@ const DynamicHeroWithForm = ({ data, previewMode = false }: DynamicHeroWithFormP
     return (
         <section className="relative bg-slate-50 overflow-hidden py-16 lg:py-24">
             {/* Decorative background element - MATCHING ORIGINAL DESIGN */}
-            <div className="absolute top-0 right-0 w-[450px] h-[450px] md:w-[700px] md:h-[700px] lg:w-[1200px] lg:h-[1200px] bg-gaete-primary/20 rounded-full -z-0 translate-x-1/3 -translate-y-1/2" />
+            {/* Decorative background element - RESPONSIVE SCALING */}
+            <div className="absolute top-0 right-0 w-[80%] pt-[80%] md:w-[60%] md:pt-[60%] bg-gaete-primary/20 rounded-full -z-0 translate-x-1/3 -translate-y-1/2 pointer-events-none" />
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="flex flex-col lg:flex-row items-center gap-12">

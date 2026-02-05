@@ -13,7 +13,7 @@
           "href": "#",
           "items": [
             {
-              "label": "Seguro Edificio",
+              "label": "Seguro de Edificio",
               "href": "/seguros/edificio"
             },
             {
@@ -59,6 +59,10 @@
             {
               "label": "Transporte / Carga",
               "href": "https://segurosgaete.cl/seguros/empresas/transporte"
+            },
+            {
+              "label": "test",
+              "href": "/seguros-para-empresas/test"
             }
           ]
         },

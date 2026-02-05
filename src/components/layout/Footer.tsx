@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12 lg:py-16 border-b border-background/10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
           {/* Column 1: Logo y descripción - Wider column for logo */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-4">
             <div className="flex items-start">
               <img
                 src={logoHorizontal}
@@ -20,7 +20,7 @@ const Footer = () => {
               />
             </div>
             <div className="space-y-4 max-w-sm">
-              <p className="text-secondary-foreground/90 text-lg lg:text-xl font-medium leading-relaxed">
+              <p className="text-white text-lg lg:text-xl font-medium leading-relaxed">
                 {COMPANY.tagline}
               </p>
               <p className="text-background/60 text-sm">

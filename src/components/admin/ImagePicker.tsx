@@ -43,15 +43,32 @@ const ImagePicker = ({ onSelect, currentImage }: ImagePickerProps) => {
                 <div className="relative group cursor-pointer border-2 border-dashed rounded-lg p-2 hover:bg-slate-50 transition-colors">
                     {currentImage ? (
                         <div className="relative aspect-video w-full overflow-hidden rounded bg-slate-100">
-                            <img src={currentImage} alt="Preview" className="object-cover w-full h-full" />
+                            <img
+                                src={currentImage}
+                                alt="Imagen de fondo"
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    e.currentTarget.parentElement?.classList.add('hidden');
+                                    // Fallback to showing the placeholder (by hiding this completely? No that would hide the trigger)
+                                    // Better: switch to placeholder mode. But we can't easily switch state from here without invalidating prop.
+                                    // Simple fix for now: Show a text or icon overlay.
+                                }}
+                            />
+                            {/* If image breaks, the alt text shows. Let's make sure we handle it visually if possible, but simplest is just better alt text */}
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="text-white text-sm font-medium">Cambiar Imagen</span>
                             </div>
                         </div>
                     ) : (
-                        <div className="h-32 flex flex-col items-center justify-center text-muted-foreground gap-2">
-                            <ImageIcon className="w-8 h-8 opacity-50" />
-                            <span className="text-xs">Seleccionar Imagen</span>
+                        <div className="h-40 flex flex-col items-center justify-center text-muted-foreground gap-3 bg-slate-50 rounded-md border-2 border-dashed border-slate-300 hover:bg-slate-100 transition-colors">
+                            <div className="p-3 bg-white rounded-full shadow-sm">
+                                <ImageIcon className="w-8 h-8 text-slate-400" />
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-sm font-semibold text-slate-700">Seleccionar Imagen</span>
+                                <span className="text-xs text-slate-500">Haz clic para buscar en la galería</span>
+                            </div>
                         </div>
                     )}
                 </div>

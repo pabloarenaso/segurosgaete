@@ -1,8 +1,18 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network, Percent, FileText } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Building2, Shield, Users, Clock, Headphones, CheckCircle, MessageCircle, DollarSign, Target, Handshake, Trophy, Award, AlertTriangle, Lightbulb, Network, Percent, FileText, Search, X } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { landingService } from '@/services/api';
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAutoScroll } from '@/hooks/useAutoScroll';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -11,6 +21,14 @@ import ScrollReveal from '@/components/shared/ScrollReveal';
 import PartnerMarquee from '@/components/shared/PartnerMarquee';
 import logoVerticalBlanco from '@/assets/logo-vertical-blanco.png';
 import { CONTACT, COMPANY } from '@/config/contact';
+
+// Hardcoded to prevent import crash
+const MENU_CATEGORIES = [
+  "Seguros para Personas",
+  "Seguros para Empresas",
+  "Seguros Comunidades",
+  "Seguros de Ingeniería"
+];
 
 // Componente de contador animado
 const AnimatedCounter = ({ end, suffix = "" }: { end: number; suffix?: string }) => {
@@ -92,7 +110,64 @@ const tranquilidadBenefits = [{
   description: "Nos encargamos de todos los trámites ante las aseguradoras en caso de siniestro."
 }];
 
+import CarouselControls from '@/components/shared/CarouselControls';
+
 const Index = () => {
+  const benefitsRef = useRef<HTMLDivElement>(null);
+  const { scrollNext, scrollPrev } = useAutoScroll(benefitsRef, 10000);
+
+  // Search & Filter Logic
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const { data: landings = [] } = useQuery({
+    queryKey: ['landings'],
+    queryFn: landingService.getAll
+  });
+
+  // Get unique categories for filter (Combine existing + predefined)
+  const existingCategories = new Set(landings.map((l: any) => l.menuCategory).filter(Boolean));
+  const categories = Array.from(new Set([...MENU_CATEGORIES, ...Array.from(existingCategories)]));
+
+  const filteredLandings = landings.filter((l: any) => {
+    // 1. Text Search
+    const landingName = l.name || "";
+    const matchesSearch = landingName.toLowerCase().includes(searchTerm.toLowerCase());
+    // 2. Category Filter
+    const matchesCategory = selectedCategory === "all" || l.menuCategory === selectedCategory;
+
+    // Decision: 
+    // If Searching OR Filtering -> Show all matches (ignore isFeatured)
+    // If NO Search AND NO Filter -> Show only Featured (Default view)
+    const isActiveSearch = searchTerm !== "" || selectedCategory !== "all";
+
+    if (isActiveSearch) {
+      return matchesSearch && matchesCategory;
+    } else {
+      return l.isFeatured === true;
+    }
+  });
+
+  // Limit featured display if no search is active
+  // Fallback: If no landings are featured, show recent ones (limit 6) to avoid empty section.
+  let displayLandings = [];
+
+  const isActiveSearch = searchTerm !== "" || selectedCategory !== "all";
+
+  if (isActiveSearch) {
+    displayLandings = filteredLandings;
+  } else {
+    // Default view: Show Featured
+    const featured = filteredLandings.filter((l: any) => l.isFeatured === true);
+    if (featured.length > 0) {
+      displayLandings = featured.slice(0, 6);
+    } else {
+      // Fallback: Show all (limit 6) if none are featured
+      // This ensures the section isn't empty if the user hasn't marked anything as featured yet.
+      displayLandings = landings.slice(0, 6);
+    }
+  }
+
   return <Layout>
     {/* Hero Section */}
     <section className="relative min-h-[90vh] lg:min-h-[80vh] flex items-center overflow-hidden">
@@ -222,7 +297,8 @@ const Index = () => {
     </section >
 
     {/* Tu tranquilidad está aquí - NEW SECTION */}
-    < section id="nosotros" className="py-16 lg:py-24 bg-secondary" >
+    {/* Tu tranquilidad está aquí - NEW SECTION */}
+    <section id="nosotros" className="py-16 lg:py-24 bg-secondary">
       <div className="container mx-auto px-4">
         <ScrollReveal className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -233,7 +309,7 @@ const Index = () => {
           </p>
         </ScrollReveal>
 
-        <div className="flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
+        <div ref={benefitsRef} className="flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
           {tranquilidadBenefits.map((item, index) => (
             <ScrollReveal key={item.highlight} delay={index * 0.05} className="flex-shrink-0 w-[85%] sm:w-[45%] lg:w-full snap-start h-full">
               <div className="bg-card rounded-xl p-6 h-full border border-border hover-lift flex flex-row lg:flex-col items-center lg:text-center gap-4">
@@ -253,18 +329,24 @@ const Index = () => {
             </ScrollReveal>
           ))}
         </div>
-        <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+
+        {/* Mobile Controls */}
+        <div className="flex justify-center mt-4 lg:hidden">
+          <CarouselControls onPrev={scrollPrev} onNext={scrollNext} />
+        </div>
+
+        <div className="flex justify-center gap-1.5 mt-4 lg:hidden hidden">
           {tranquilidadBenefits.map((_, i) => (
             <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
           ))}
         </div>
       </div>
-    </section >
+    </section>
 
-    {/* Nuestros Seguros */}
-    < section id="servicios" className="py-16 lg:py-24" >
+    {/* Nuestros Seguros (Dynamic) */}
+    <section id="servicios" className="py-16 lg:py-24">
       <div className="container mx-auto px-4">
-        <ScrollReveal className="text-center mb-12">
+        <ScrollReveal className="text-center mb-10">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
             Seguros Especializados
           </h2>
@@ -273,67 +355,92 @@ const Index = () => {
           </p>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
-          {/* Card 1: Seguro Edificio */}
-          <ScrollReveal delay={0.1}>
-            <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
-              y: -5
-            }}>
-              <div className="h-48 lg:h-56 bg-cover bg-center" style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800')`
-              }} />
-              <div className="p-6 lg:p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                  <Building2 className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-card-foreground mb-3">
-                  Seguro para Edificios y Condominios
-                </h3>
-                <p className="text-muted-foreground mb-6">
-                  Protege espacios comunes, unidades y responsabilidad civil
-                  de administradores con cobertura integral.
-                </p>
-                <Button asChild className="w-full">
-                  <Link to="/seguros/edificio">
-                    Más información
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          </ScrollReveal>
+        {/* Search & Filter Bar */}
+        <div className="max-w-4xl mx-auto mb-12 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Buscar seguro..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <div className="w-full md:w-64">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Categoría" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas las categorías</SelectItem>
+                  {categories.map((cat: any) => (
+                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
 
-          {/* Card 2: Vida Guardias */}
-          <ScrollReveal delay={0.2}>
-            <motion.div className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift" whileHover={{
-              y: -5
-            }}>
-              <div className="h-48 lg:h-56 bg-cover bg-center" style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&q=80&w=800')`
-              }} />
-              <div className="p-6 lg:p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                  <Shield className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-card-foreground mb-3">
-                  Seguro de Vida Guardias (DS-93)
-                </h3>
-                <p className="text-muted-foreground mb-6">
-                  Cumple con la normativa legal obligatoria para guardias
-                  y conserjes según Decreto Supremo 93.
-                </p>
-                <Button asChild className="w-full">
-                  <Link to="/seguros/guardias">
-                    Más información
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+        {/* Results Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+          <AnimatePresence mode="popLayout">
+            {displayLandings.length > 0 ? (
+              displayLandings.map((landing: any) => (
+                <motion.div
+                  layout
+                  key={landing.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift border border-border flex flex-col h-full"
+                >
+                  <div className="h-48 bg-cover bg-center shrink-0" style={{
+                    backgroundImage: `url('${landing?.content?.hero?.backgroundImage || 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800'}')`
+                  }} />
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="mb-4">
+                      <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full">
+                        {landing?.menuCategory || "Seguros"}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-card-foreground mb-2 line-clamp-2">
+                      {landing?.name || "Sin nombre"}
+                    </h3>
+                    <p className="text-muted-foreground mb-6 line-clamp-3 text-sm flex-grow">
+                      {landing?.content?.hero?.subtitle || "Sin descripción disponible"}
+                    </p>
+                    <Button asChild className="w-full mt-auto">
+                      <Link to={landing?.slug || "#"}>
+                        Más información
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
+                    </Button>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-muted-foreground">
+                <p>No se encontraron seguros con esos criterios.</p>
+                <Button variant="link" onClick={() => { setSearchTerm(""); setSelectedCategory("all"); }}>
+                  Limpiar filtros
                 </Button>
               </div>
-            </motion.div>
-          </ScrollReveal>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-    </section >
+    </section>
 
     {/* ¿Por qué Seguros Gaete? */}
     < section className="py-16 lg:py-24 bg-muted/30" >

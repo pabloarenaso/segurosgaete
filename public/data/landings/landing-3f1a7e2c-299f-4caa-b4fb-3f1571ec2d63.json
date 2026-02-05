@@ -1,0 +1,76 @@
+{
+  "id": "3f1a7e2c-299f-4caa-b4fb-3f1571ec2d63",
+  "name": "test",
+  "slug": "/seguros-para-empresas/test",
+  "menuCategory": "Seguros para Empresas",
+  "isFeatured": true,
+  "createdAt": "2026-02-05T11:27:31.954Z",
+  "updatedAt": "2026-02-05T11:28:37.093Z",
+  "content": {
+    "hero": {
+      "title": "test",
+      "subtitle": "test",
+      "backgroundImage": "/images/uploads/guardia-hero-v2.png"
+    },
+    "form": {
+      "title": "Cotiza tu Seguro",
+      "fields": [
+        {
+          "id": "nombre",
+          "label": "Nombre*",
+          "type": "text",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "email",
+          "label": "Email*",
+          "type": "email",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "telefono",
+          "label": "Teléfono",
+          "type": "tel",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "cargo",
+          "label": "Cargo*",
+          "type": "select",
+          "options": [
+            "Administrador",
+            "Presidente"
+          ]
+        }
+      ]
+    },
+    "coverages": {
+      "title": "¿Qué protege?",
+      "subtitle": "Coberturas",
+      "items": []
+    },
+    "benefits": {
+      "title": "¿Por qué nosotros?",
+      "subtitle": "Beneficios",
+      "items": []
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "video": {
+        "title": "",
+        "iframeUrl": "",
+        "thumbnail": ""
+      },
+      "questions": []
+    },
+    "resources": {
+      "visible": false,
+      "title": "Recursos",
+      "subtitle": "",
+      "enabledResourceIds": []
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useAutoScroll } from '@/hooks/useAutoScroll';
+import CarouselControls from '@/components/shared/CarouselControls';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -117,7 +118,7 @@ const SeguroEdificio = () => {
   const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
   const benefitsRef = useRef<HTMLDivElement>(null);
-  useAutoScroll(benefitsRef, 10000);
+  const { scrollNext, scrollPrev } = useAutoScroll(benefitsRef, 10000);
 
   return (
     <Layout>
@@ -150,7 +151,12 @@ const SeguroEdificio = () => {
               </ScrollReveal>
             ))}
           </div>
-          <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+
+          <div className="flex justify-center mt-4 lg:hidden">
+            <CarouselControls onPrev={scrollPrev} onNext={scrollNext} />
+          </div>
+
+          <div className="flex justify-center gap-1.5 mt-4 lg:hidden hidden">
             {benefits.map((_, i) => (
               <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
             ))}

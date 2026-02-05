@@ -4,13 +4,59 @@
     "name": "Seguro de Edificio",
     "slug": "/seguros/edificio",
     "createdAt": "2026-01-27T15:05:05.361Z",
-    "updatedAt": "2026-01-27T15:05:05.361Z"
+    "updatedAt": "2026-02-05T13:24:46.911Z",
+    "isFeatured": true,
+    "content": {
+      "hero": {
+        "title": "La protección más completa para tu Edificio",
+        "subtitle": "Protección integral para espacios comunes, departamentos y responsabilidad civil de administradores. Cumple con la normativa vigente y asegura la tranquilidad de tu comunidad.",
+        "backgroundImage": "/images/uploads/edificio-hero.jpg"
+      }
+    }
   },
   {
     "id": "b74e23cf-1718-4291-b522-9289c3baf8de",
     "name": "Vida Guardias DS-93",
     "slug": "/seguros/guardias",
     "createdAt": "2026-01-27T15:05:05.369Z",
-    "updatedAt": "2026-01-27T15:05:05.369Z"
+    "updatedAt": "2026-02-05T11:28:38.464Z",
+    "isFeatured": true,
+    "content": {
+      "hero": {
+        "title": "Seguro de Vida para Guardias (DS-93)",
+        "subtitle": "Cumple con la normativa legal vigente del Decreto Supremo 93 de manera rápida y sencilla. Protege a tu personal de seguridad con la mejor asesoría del mercado.",
+        "backgroundImage": "/images/uploads/guardia-hero-v2.png"
+      }
+    }
+  },
+  {
+    "id": "3f1a7e2c-299f-4caa-b4fb-3f1571ec2d63",
+    "name": "test",
+    "slug": "/seguros-para-empresas/test",
+    "isFeatured": true,
+    "createdAt": "2026-02-05T11:27:31.954Z",
+    "updatedAt": "2026-02-05T11:28:37.093Z",
+    "content": {
+      "hero": {
+        "title": "test",
+        "subtitle": "test",
+        "backgroundImage": "/images/uploads/guardia-hero-v2.png"
+      }
+    }
+  },
+  {
+    "id": "a0908088-0a6c-4d7a-ae9b-f5955241073e",
+    "name": "Seguro de Edificio (Copia)",
+    "slug": "/seguros/edificio-clon",
+    "isFeatured": false,
+    "createdAt": "2026-02-05T15:47:57.331Z",
+    "updatedAt": "2026-02-05T16:41:02.835Z",
+    "content": {
+      "hero": {
+        "title": "La protección más completa para tu Edificio",
+        "subtitle": "Protección integral para espacios comunes, departamentos y responsabilidad civil de administradores. Cumple con la normativa vigente y asegura la tranquilidad de tu comunidad.",
+        "backgroundImage": "/images/uploads/edificio-hero.jpg"
+      }
+    }
   }
 ]

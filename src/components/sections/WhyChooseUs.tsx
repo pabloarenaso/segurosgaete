@@ -55,10 +55,11 @@ const differentiators = [
 
 import { useRef } from 'react';
 import { useAutoScroll } from '@/hooks/useAutoScroll';
+import CarouselControls from '@/components/shared/CarouselControls';
 
 const WhyChooseUs = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    useAutoScroll(scrollRef, 10000);
+    const { scrollNext, scrollPrev } = useAutoScroll(scrollRef, 10000);
 
     return (
         <section className="py-16 lg:py-24 bg-slate-50">
@@ -89,7 +90,13 @@ const WhyChooseUs = () => {
                         </ScrollReveal>
                     ))}
                 </div>
-                <div className="flex justify-center gap-1.5 mt-4 lg:hidden">
+
+                {/* Mobile Controls */}
+                <div className="flex justify-center mt-4 lg:hidden">
+                    <CarouselControls onPrev={scrollPrev} onNext={scrollNext} />
+                </div>
+
+                <div className="flex justify-center gap-1.5 mt-4 lg:hidden hidden">
                     {differentiators.map((_, i) => (
                         <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/20" />
                     ))}
