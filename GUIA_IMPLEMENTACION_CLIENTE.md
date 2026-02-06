@@ -1,35 +1,40 @@
 # Plan de Implementación y Migración - Seguros Gaete
 
-Este documento detalla los pasos técnicos para desplegar el nuevo sitio web (CMS) y gestionar la coexistencia con el sitio antiguo (~70 landings) durante el periodo de transición.
+**Objetivo:** Desplegar el nuevo ecosistema digital (CMS) manteniendo la operatividad de las ~70 landings existentes mediante una estrategia de coexistencia segura.
 
 ## Estrategia General: "Coexistencia Híbrida"
 
-Dado que migrar 70 páginas de una sola vez es complejo, recomendamos una estrategia donde ambos sitios funcionan simultáneamente:
+> [!IMPORTANT]
+> **No es necesario migrar todo hoy.** Recomendamos una transición gradual donde el sitio nuevo y el antiguo funcionan en paralelo.
 
-1.  **Sitio Nuevo (CMS):** Se instala en el dominio principal (`www.segurosgaete.cl`) para dar la bienvenida con la nueva imagen.
-2.  **Sitio Antiguo (Legacy):** Se mueve a un subdominio (ej: `antiguo.segurosgaete.cl`).
-3.  **Interconexión:**
-    *   El menú del **Sitio Nuevo** tendrá enlaces que llevan al **Sitio Antiguo** para los seguros que aún no se migran.
-    *   El logo/header del **Sitio Antiguo** debe tener un enlace de vuelta al **Sitio Nuevo**.
-
----
-
-## Fase 1: Preparación del Sitio Antiguo
-
-Antes de activar el nuevo sitio, debemos asegurarnos de que el antiguo siga accesible.
-
-1.  **Configurar Subdominio:**
-    *   En su panel de hosting/DNS, cree un subdominio (ej: `antiguo.segurosgaete.cl`) que apunte a la carpeta o servidor donde está el sitio actual.
-2.  **Actualizar Enlaces de Retorno:**
-    *   Edite la cabecera (Header) del sitio antiguo.
-    *   Cambie el enlace del Logo "Seguros Gaete" para que apunte a `https://www.segurosgaete.cl` (el dominio principal donde estará el sitio nuevo).
-    *   *Objetivo:* Si un usuario está navegando una landing antigua y hace clic en "Inicio", debe volver a la experiencia nueva.
+1.  **Sitio Nuevo (CMS):** Toma el control del dominio principal (`www.segurosgaete.cl`) para renovar la imagen de marca inmeditamente.
+2.  **Sitio Antiguo (Legacy):** Se reubica en un subdominio (ej: `antiguo.segurosgaete.cl`) para preservar el acceso a los seguros históricos.
+3.  **Navegación Unificada:** El usuario navegará entre ambos sistemas de forma transparente gracias a la configuración del menú que ya hemos preparado.
 
 ---
 
-## Fase 2: Despliegue del Nuevo Sitio (CMS)
+## Fase 1: Preparación del Entorno (Antes del "Switch")
 
-El nuevo sistema utiliza **Docker**, lo que garantiza que funcione igual en cualquier servidor.
+Antes de activar el nuevo sitio, debemos preparar el antiguo para su nuevo rol.
+
+### 1. Configuración de Subdominio
+Solicite a su equipo de TI o proveedor de hosting lo siguiente:
+*   Crear el subdominio `antiguo.segurosgaete.cl` (o similar).
+*   Apuntar este subdominio a la carpeta/servidor donde reside el sitio web actual.
+
+### 2. Cerrar el Ciclo de Navegación
+Para evitar que los usuarios queden "atrapados" en el diseño antiguo:
+> [!TIP]
+> Edite el header del sitio antiguo para que el logo de "Seguros Gaete" apunte de vuelta a `https://www.segurosgaete.cl`. Así, el usuario siempre puede regresar a la experiencia renovada.
+
+### 3. Redirección de Inicio (Opcional pero Recomendado)
+Configure una redirección en el sitio antiguo para que si alguien entra a `antiguo.segurosgaete.cl/` (home), sea redirigido automáticamente al nuevo sitio.
+
+---
+
+## Fase 2: Despliegue del Nuevo CMS
+
+El sistema está contenerizado con Docker para garantizar estabilidad e independencia.
 
 ### Requisitos del Servidor
 *   Acceso SSH.
@@ -37,80 +42,32 @@ El nuevo sistema utiliza **Docker**, lo que garantiza que funcione igual en cual
 
 ### Pasos de Instalación
 
-1.  **Copiar los Archivos:**
-    Suba la carpeta del proyecto `segurosgaete` a su servidor (o clone el repositorio si usa Git).
+1.  **Transferencia de Archivos:**
+    Suba la carpeta del proyecto entregada (`segurosgaete`) a su servidor.
 
-2.  **Configurar Variables de Entorno (.env):**
-    Dentro de la carpeta `segurosgaete`, asegúrese de tener los archivos `.env` configurados.
-    *   Asegúrese de cambiar `ADMIN_TOKEN` en `docker-compose.yml` o `.env` por una contraseña segura.
+2.  **Validación de Datos:**
+    El equipo de desarrollo ya ha precargado la configuración del menú (`menu-config.json`) con los enlaces a sus landings históricas. No es necesaria ninguna acción manual.
 
-3.  **Iniciar la Aplicación:**
-    Ejecute el siguiente comando en la terminal dentro de la carpeta del proyecto:
+3.  **Despliegue (Deploy):**
+    Ejecute en la terminal del servidor:
     ```bash
+    cd /ruta/a/segurosgaete
     docker compose up -d --build
     ```
-    *   Esto descargará las dependencias y levantará el sitio en el puerto `8080`.
-    *   *Nota:* Para salir a producción en el puerto 80, edite `docker-compose.yml` y cambie `"8080:80"` por `"80:80"`.
+    *El sitio estará operativo en cuestión de minutos.*
 
 ---
 
-## Fase 3: Configuración del Menú (Híbrido)
+## Fase 3: Operación Continua y Migración Futura
 
-El menú del nuevo sitio es dinámico y editable. Para que apunte a las landings del sitio antiguo, usted tiene dos opciones:
+El sistema está diseñado para que usted tome el control total.
 
-### Opción A: Edición Manual (Recomendada para carga inicial masiva)
-Los datos del menú se guardan en un archivo JSON en su servidor: `segurosgaete/public/data/menu-config.json`.
+### Gestión de Contenidos
+*   **Crear:** Puede crear nuevas landings ilimitadas desde el panel de administración.
+*   **Migrar:** A su propio ritmo, puede ir pasando las landings antiguas al nuevo formato copiando y pegando el contenido en nuestro editor visual.
 
-1.  Abra este archivo con un editor de texto o vía terminal.
-2.  Agregue los enlaces a las páginas antiguas usando la URL del subdominio.
+### Actualización Automática del Menú
+Al crear una nueva landing en el CMS (ej: "Seguro Incendio"), el sistema le dará la opción de agregarla al menú automáticamente.
 
-**Ejemplo de `menu-config.json`:**
-```json
-{
-  "items": [
-    { 
-      "label": "Inicio", 
-      "href": "/" 
-    },
-    {
-      "label": "Seguros",
-      "href": "#",
-      "items": [
-        {
-          "label": "Seguro de Edificio (Nuevo)",
-          "href": "/seguros/edificio" 
-        },
-        {
-          "label": "Incendio Hogar (Antiguo)",
-          "href": "https://antiguo.segurosgaete.cl/seguros/incendio-hogar"
-        },
-        {
-          "label": "Responsabilidad Civil (Antiguo)",
-          "href": "https://antiguo.segurosgaete.cl/seguros/rc"
-        }
-      ]
-    }
-  ]
-}
-```
-*Al guardar el archivo, el menú se actualizará automáticamente en el sitio web.*
-
-### Opción B: Edición desde el Código
-Si prefiere entregar el código ya listo, puede editar `public/data/menu-config.json` en su computadora **antes** de subir el proyecto al servidor.
-
----
-
-## Fase 4: Migración Progresiva
-
-Una vez que el sistema esté corriendo en modo híbrido, puede migrar las landings antiguas al nuevo CMS una por una sin apuro.
-
-**Flujo de trabajo sugerido:**
-
-1.  **Crear Nueva Landing:** Entre al Panel de Administración (`/login`) y cree una nueva landing (ej: "Seguro Incendio").
-2.  **Copiar Contenido:** Copie los textos e imágenes del sitio antiguo al editor visual del nuevo CMS.
-3.  **Publicar:** Guarde la landing (ej: slug `/seguros/incendio`).
-4.  **Actualizar Menú:**
-    *   El CMS intentará agregar la página al menú automáticamente.
-    *   Si prefiere control manual, edite el archivo `menu-config.json` y cambie el enlace antiguo (`https://antiguo...`) por el nuevo slug (`/seguros/incendio`).
-
-De esta forma, pasará gradualmente de tener 70 enlaces externos a 70 páginas internas gestionables, mejorando el SEO y la velocidad con cada paso.
+> [!NOTE]
+> Cuando migre una landing antigua, recuerde que la nueva tendrá una URL más limpia (ej: `/seguros/incendio`). El sistema priorizará esta nueva página sobre el enlace antiguo automáticamente.
