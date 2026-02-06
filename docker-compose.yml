@@ -18,13 +18,8 @@ services:
       - NODE_ENV=production
       - ADMIN_TOKEN=admin-secret-token # Change this!
     volumes:
-      # Persist data directories
-      - landing_data:/app/public/data
-      - landing_images:/app/public/images/uploads
-      - landing_resources:/app/public/resources
+      # Persist data directories (Bind mounts for easy access)
+      - ./public/data:/app/public/data
+      - ./public/images/uploads:/app/public/images/uploads
+      - ./public/resources:/app/public/resources
     restart: always
-
-volumes:
-  landing_data:
-  landing_images:
-  landing_resources:
