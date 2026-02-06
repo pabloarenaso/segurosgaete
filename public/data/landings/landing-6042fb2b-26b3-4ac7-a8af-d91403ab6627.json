@@ -3,7 +3,7 @@
   "name": "Seguro de Edificio",
   "slug": "/seguros/edificio",
   "createdAt": "2026-01-27T15:05:05.361Z",
-  "updatedAt": "2026-02-05T13:24:46.911Z",
+  "updatedAt": "2026-02-05T17:32:50.442Z",
   "content": {
     "hero": {
       "title": "La protección más completa para tu Edificio",
@@ -79,7 +79,8 @@
           ],
           "required": true
         }
-      ]
+      ],
+      "enableStep2": true
     },
     "coverages": {
       "show": true,

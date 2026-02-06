@@ -20,6 +20,7 @@ import CTASection from '@/components/shared/CTASection';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 import PartnerMarquee from '@/components/shared/PartnerMarquee';
 import logoVerticalBlanco from '@/assets/logo-vertical-blanco.png';
+import HeroCarousel from '@/components/home/HeroCarousel';
 import { CONTACT, COMPANY } from '@/config/contact';
 
 // Hardcoded to prevent import crash
@@ -169,82 +170,8 @@ const Index = () => {
   }
 
   return <Layout>
-    {/* Hero Section */}
-    <section className="relative min-h-[90vh] lg:min-h-[80vh] flex items-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-cover bg-center" style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1920')`
-        }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
-      </div>
-
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
-
-          {/* Logo removed for mobile/tablet - only header logo is shown */}
-
-          {/* Columna izquierda - Contenido de texto */}
-          <motion.div
-            className="flex-1 text-center lg:text-left max-w-2xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-
-            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-background mb-6 leading-tight">
-              Seguros que te acompañan en cada etapa
-            </h1>
-
-            <p className="text-xl lg:text-2xl text-background/90 mb-8">
-              Más de {COMPANY.yearsExperience} años protegiendo tu tranquilidad. Asesoría personalizada con las mejores aseguradoras del mercado.
-            </p>
-
-            {/* Double CTA */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button asChild size="lg" className="bg-background text-foreground hover:bg-background/90 text-base">
-                <Link to="/contacto">
-                  <FileText className="w-5 h-5 mr-2" />
-                  Solicitar Cotización
-                </Link>
-              </Button>
-              <Button asChild size="lg" className="bg-[#25D366] text-white border-[#25D366] hover:bg-[#20BD5A] text-base">
-                <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\+/g, '')}?text=Hola, necesito información sobre seguros`} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Hablar por WhatsApp
-                </a >
-              </Button >
-            </div >
-          </motion.div >
-
-          {/* Columna derecha - Lista de beneficios (solo desktop) */}
-          < motion.div
-            className="hidden lg:flex flex-col gap-4 flex-shrink-0 max-w-md"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            {
-              heroBenefits.map((benefit, index) => (
-                <motion.div
-                  key={benefit.text}
-                  className="flex items-center gap-3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                >
-                  <div className="w-10 h-10 bg-primary/30 rounded-full flex items-center justify-center flex-shrink-0">
-                    <benefit.icon className="w-5 h-5 text-primary-light" />
-                  </div>
-                  <span className="text-background/90 text-base lg:text-lg">{benefit.text}</span>
-                </motion.div>
-              ))
-            }
-          </motion.div >
-        </div >
-      </div >
-    </section >
+    {/* Hero Carousel */}
+    <HeroCarousel landings={landings} />
 
     {/* Social Proof Bar */}
     < section className="py-8 bg-primary" >
