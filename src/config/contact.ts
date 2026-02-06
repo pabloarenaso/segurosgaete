@@ -48,7 +48,7 @@ export const COMPANY = {
   tagline: 'Siempre protegiendo tu tranquilidad',
   foundedYear: 1986,
   yearsExperience: new Date().getFullYear() - 1987,
-  clients: '1,200+',
+  clients: '2.000 +',
   insurers: '23+',
 } as const;
 
