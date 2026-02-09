@@ -14,11 +14,28 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({ children, ...props }) => {
         if (frame && frame.contentDocument) {
             const doc = frame.contentDocument;
 
-            // Copy styles from main document to iframe
-            const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'));
-            styles.forEach(style => {
+            // Function to copy styles
+            const copyStyle = (node: Node) => {
+                if (node instanceof Element && (node.tagName === 'STYLE' || (node.tagName === 'LINK' && (node as HTMLLinkElement).rel === 'stylesheet'))) {
+                    doc.head.appendChild(node.cloneNode(true));
+                }
+            };
+
+            // Copy existing styles
+            Array.from(document.querySelectorAll('style, link[rel="stylesheet"]')).forEach(style => {
                 doc.head.appendChild(style.cloneNode(true));
             });
+
+            // Observe for new styles injected into the main document
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        copyStyle(node);
+                    });
+                });
+            });
+
+            observer.observe(document.head, { childList: true });
 
             // Copy classes from main html/body to iframe (crucial for Tailwind variables like --foreground)
             doc.documentElement.className = document.documentElement.className;
@@ -42,6 +59,8 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({ children, ...props }) => {
             doc.head.appendChild(previewStyle);
 
             setMountNode(doc.body);
+
+            return () => observer.disconnect();
         }
     }, []);
 
