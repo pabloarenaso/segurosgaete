@@ -358,6 +358,25 @@ app.get('/api/menu', async (req, res) => {
     }
 });
 
+// Update Menu
+app.post('/api/menu', requireAuth, async (req, res) => {
+    try {
+        const menuPath = path.join(__dirname, '../public/data/menu-config.json');
+        const menuData = req.body; // Expect { items: [...] }
+
+        // Basic validation
+        if (!menuData || !Array.isArray(menuData.items)) {
+            return res.status(400).json({ error: 'Invalid menu data format' });
+        }
+
+        await fs.writeFile(menuPath, JSON.stringify(menuData, null, 2));
+        res.json(menuData);
+    } catch (error) {
+        console.error("Failed to save menu:", error);
+        res.status(500).json({ error: 'Failed to save menu configuration' });
+    }
+});
+
 
 // Delete landing
 app.delete('/api/landings/:id', requireAuth, async (req, res) => {

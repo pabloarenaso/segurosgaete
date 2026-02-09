@@ -35,6 +35,8 @@ import { landingService } from "@/services/api";
 import { toast } from "sonner";
 import { Landing } from "@/types/landing.types";
 import { Star, StarOff } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MenuManager from "../../components/admin/settings/MenuManager";
 // import { MENU_CATEGORIES } from "@/config/categories";
 
 const MENU_CATEGORIES = [
@@ -43,6 +45,8 @@ const MENU_CATEGORIES = [
     "Seguros Comunidades",
     "Seguros de Ingeniería"
 ];
+
+import { MenuItem } from "@/types/menu.types";
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -55,7 +59,7 @@ const Dashboard = () => {
 
     const [newName, setNewName] = useState("");
     const [newSlug, setNewSlug] = useState("");
-    const [category, setCategory] = useState("Seguros para Empresas"); // Default
+    const [category, setCategory] = useState(""); // Selected Category for menu
 
     // Fetch Landings
     const { data: landings = [], isLoading, isError } = useQuery({
@@ -64,18 +68,93 @@ const Dashboard = () => {
         refetchOnWindowFocus: true
     });
 
+    // Fetch Menu for categories and syncing
+    const { data: menuConfig } = useQuery({
+        queryKey: ['menu'],
+        queryFn: landingService.getMenu
+    });
+
     const featuredCount = landings.filter((l: any) => l.isFeatured).length;
+
+    // Filter categories from menu (only top level or deep? strictly top level based on user request "Categorias")
+    // Use the type 'category' to identify them, OR if it has items/submenu
+    // We need to look deep because "Seguros" is a top category, but the actual usable categories are its children
+    const getCategories = (items: any[], depth = 0): any[] => {
+        let cats: any[] = [];
+        items.forEach(item => {
+            // Check if it's explicitly a category OR has sub-items (legacy inference)
+            const isCategory = item.type === 'category' || (item.items && item.items.length > 0);
+
+            if (isCategory) {
+                // Exclude root-level containers (like "Seguros", "Clientes")
+                const isRootContainer = depth === 0;
+
+                if (!isRootContainer) {
+                    cats.push({ label: item.label, type: 'category' });
+                }
+
+                if (item.items) {
+                    cats = [...cats, ...getCategories(item.items, depth + 1)];
+                }
+            }
+        });
+        return cats;
+    };
+
+    // Deduplicate by label just in case
+    const rawCategories = menuConfig?.items ? getCategories(menuConfig.items) : [];
+    const menuCategories = Array.from(new Set(rawCategories.map(c => c.label)))
+        .map(label => rawCategories.find(c => c.label === label));
+
+    // Helper to update menu
+    const updateMenuWithLanding = async (action: 'add' | 'remove', landingName: string, landingSlug: string, categoryLabel?: string) => {
+        if (!menuConfig) return;
+        const newMenu = JSON.parse(JSON.stringify(menuConfig)); // Deep copy
+
+        if (action === 'add' && categoryLabel) {
+            const catIndex = newMenu.items.findIndex((item: any) => item.label === categoryLabel && item.type === 'category');
+            if (catIndex !== -1) {
+                if (!newMenu.items[catIndex].items) newMenu.items[catIndex].items = [];
+                newMenu.items[catIndex].items.push({
+                    label: landingName,
+                    href: landingSlug,
+                    type: 'landing'
+                });
+                await landingService.saveMenu(newMenu);
+                queryClient.invalidateQueries({ queryKey: ['menu'] });
+            }
+        } else if (action === 'remove') {
+            // Recursive remove by href
+            const removeRecursive = (items: any[]) => {
+                return items.filter(item => {
+                    if (item.href === landingSlug) return false;
+                    if (item.items) item.items = removeRecursive(item.items);
+                    return true;
+                });
+            };
+            newMenu.items = removeRecursive(newMenu.items);
+            await landingService.saveMenu(newMenu);
+            queryClient.invalidateQueries({ queryKey: ['menu'] });
+        }
+    };
 
     // Mutations
     const createMutation = useMutation({
-        mutationFn: landingService.create,
+        mutationFn: async (data: any) => {
+            // Create landing
+            const res = await landingService.create(data);
+            // Add to menu if category selected
+            if (data.menuCategory) {
+                await updateMenuWithLanding('add', data.name, data.slug, data.menuCategory);
+            }
+            return res;
+        },
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['landings'] });
             setIsCreateOpen(false);
-            toast.success("Landing creada exitosamente");
+            toast.success("Landing creada y agregada al menú");
             setNewName("");
             setNewSlug("");
-            // Navigate to editor
             navigate(`/admin/editor/${data.id}`);
         },
         onError: (err: any) => {
@@ -86,21 +165,23 @@ const Dashboard = () => {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: landingService.delete,
+        mutationFn: async (id: string) => {
+            // Find landing to get slug for menu removal
+            const landing = landings.find((l: any) => l.id === id);
+            await landingService.delete(id);
+            if (landing) {
+                await updateMenuWithLanding('remove', landing.name, landing.slug);
+            }
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['landings'] });
             setDeleteId(null);
-            toast.success("Landing eliminada");
+            toast.success("Landing eliminada del sistema y del menú");
         }
     });
 
     const toggleFeaturedMutation = useMutation({
         mutationFn: async ({ id, isFeatured }: { id: string, isFeatured: boolean }) => {
-            // We need to fetch the full landing first to update it, 
-            // but the table only has summary data. 
-            // Ideally backend would support PATCH, but we have PUT.
-            // For now, let's assume we can just send the flag? No, PUT replaces content.
-            // We need to fetch, then update.
             const fullLanding = await landingService.getById(id);
             return landingService.update(id, { ...fullLanding, isFeatured });
         },
@@ -117,26 +198,26 @@ const Dashboard = () => {
     const duplicateMutation = useMutation({
         mutationFn: async () => {
             if (!duplicateItem) return;
-            // 1. Fetch full source content
             const fullSource = await landingService.getById(duplicateItem.id);
             const sourceContent = fullSource.content || {};
 
-            // 2. Create the new landing (basic info)
             const newLanding = await landingService.create({
                 name: dupName,
                 slug: dupSlug,
                 menuCategory: fullSource.menuCategory,
-                // content: sourceContent // Try sending content, but we'll force update next to be sure
             });
 
-            // 3. Force update with the content to ensure it's identical
-            // This bypasses any "create with default content" logic the backend might have
             if (newLanding && newLanding.id) {
                 await landingService.update(newLanding.id, {
                     ...newLanding,
-                    content: sourceContent, // Deep copy effectively
-                    isFeatured: false // Reset featured status
+                    content: sourceContent,
+                    isFeatured: false
                 });
+
+                // Add to menu (using source category)
+                if (fullSource.menuCategory) {
+                    await updateMenuWithLanding('add', dupName, dupSlug, fullSource.menuCategory);
+                }
             }
 
             return newLanding;
@@ -144,7 +225,7 @@ const Dashboard = () => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['landings'] });
             setDuplicateItem(null);
-            toast.success("Landing duplicada exitosamente");
+            toast.success("Landing duplicada y agregada al menú");
             if (data?.id) {
                 navigate(`/admin/editor/${data.id}`);
             }
@@ -164,7 +245,6 @@ const Dashboard = () => {
     const handleDupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setDupName(val);
-        // Use source category for slug gen
         if (duplicateItem) {
             setDupSlug(generateSlug(val, duplicateItem.menuCategory));
         }
@@ -192,12 +272,9 @@ const Dashboard = () => {
         }
     }, [category]);
 
-    // Auto-generate slug from name
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setNewName(val);
-        // Auto update slug if it hasn't been manually edited (simple heuristic or always)
-        // For simplicity, always update based on current inputs
         setNewSlug(generateSlug(val, category));
     };
 
@@ -209,169 +286,193 @@ const Dashboard = () => {
         <div className="space-y-6 animate-in fade-in">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-slate-800">Panel de Landings</h2>
-                    <p className="text-muted-foreground mt-1">Gestiona tus páginas de aterrizaje desde aquí.</p>
+                    <h2 className="text-3xl font-bold tracking-tight text-slate-800">Panel de Administración</h2>
+                    <p className="text-muted-foreground mt-1">Gestiona el contenido de tu sitio web.</p>
                 </div>
+            </div>
 
-                <div className="flex items-center gap-4">
-                    {/* Featured Count Indicator */}
-                    {!isLoading && (
-                        <div className={`text-xs font-semibold px-3 py-1.5 rounded-full border flex items-center gap-1 ${featuredCount >= 8
-                            ? 'bg-red-50 text-red-700 border-red-200'
-                            : 'bg-amber-50 text-amber-700 border-amber-200'
-                            }`}>
-                            <Star className="w-3.5 h-3.5" fill="currentColor" />
-                            <span>Destacados: {featuredCount}/8</span>
+            <Tabs defaultValue="landings" className="space-y-4">
+                <TabsList>
+                    <TabsTrigger value="landings">Landings</TabsTrigger>
+                    <TabsTrigger value="menu">Menú Principal</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="landings" className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-lg font-medium">Landings Creadas</h3>
                         </div>
-                    )}
+                        <div className="flex items-center gap-4">
+                            {!isLoading && (
+                                <div className={`text-xs font-semibold px-3 py-1.5 rounded-full border flex items-center gap-1 ${featuredCount >= 8
+                                    ? 'bg-red-50 text-red-700 border-red-200'
+                                    : 'bg-amber-50 text-amber-700 border-amber-200'
+                                    }`}>
+                                    <Star className="w-3.5 h-3.5" fill="currentColor" />
+                                    <span>Destacados: {featuredCount}/8</span>
+                                </div>
+                            )}
 
-                    <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                        <DialogTrigger asChild>
-                            <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
-                                <Plus size={18} /> Nueva Landing
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Crear Nueva Landing Page</DialogTitle>
-                            </DialogHeader>
-                            <form onSubmit={handleCreate} className="space-y-4 py-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="name">Nombre del Seguro</Label>
-                                    <Input
-                                        id="name"
-                                        value={newName}
-                                        onChange={handleNameChange}
-                                        placeholder="Ej: Seguro de Vida"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="slug">URL Amigable (Slug)</Label>
-                                    <Input
-                                        id="slug"
-                                        value={newSlug}
-                                        onChange={(e) => setNewSlug(e.target.value)}
-                                        placeholder="/seguros/ejemplo"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="category">Categoría en Menú</Label>
-                                    <select
-                                        id="category"
-                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                        value={category}
-                                        onChange={(e) => setCategory(e.target.value)}
-                                    >
-                                        <option value="">-- No incluír en menú --</option>
-                                        <option value="Seguros">Seguros (General)</option>
-                                        {MENU_CATEGORIES.map(cat => (
-                                            <option key={cat} value={cat}>{cat}</option>
-                                        ))}
-                                    </select>
-                                    <p className="text-xs text-muted-foreground">Selecciona dónde aparecerá el enlace a esta landing.</p>
-                                </div>
-                                <DialogFooter>
-                                    <Button type="submit" disabled={createMutation.isPending}>
-                                        {createMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                        Crear Landing
+                            <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                                <DialogTrigger asChild>
+                                    <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+                                        <Plus size={18} /> Nueva Landing
                                     </Button>
-                                </DialogFooter>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-            </div>
-
-            <div className="bg-white rounded-lg border shadow-sm">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>URL</TableHead>
-                            <TableHead className="text-center">Destacado</TableHead>
-                            <TableHead>Última Modificación</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {isLoading ? (
-                            <TableRow>
-                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                                    Cargando...
-                                </TableCell>
-                            </TableRow>
-                        ) : landings.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                                    No hay landings creadas aún.
-                                </TableCell>
-                            </TableRow>
-                        ) : (
-                            landings.map((landing: any) => (
-                                <TableRow key={landing.id}>
-                                    <TableCell className="font-medium text-slate-700">
-                                        {landing.name}
-                                    </TableCell>
-                                    <TableCell className="text-muted-foreground font-mono text-sm">
-                                        {landing.slug}
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => toggleFeaturedMutation.mutate({ id: landing.id, isFeatured: !landing.isFeatured })}
-                                            disabled={toggleFeaturedMutation.isPending}
-                                            className={landing.isFeatured ? "text-yellow-500 hover:text-yellow-600" : "text-gray-300 hover:text-yellow-500"}
-                                        >
-                                            {landing.isFeatured ? <Star size={18} fill="currentColor" /> : <StarOff size={18} />}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell>
-                                        {landing.updatedAt ? new Date(landing.updatedAt).toLocaleDateString() : '-'}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Button variant="ghost" size="icon" title="Ver" asChild>
-                                                {/* In dev mode, we link to dynamic landing route. 
-                                                    Ideally: /preview/{id} or dynamic route */}
-                                                <Link to={`/admin/preview/${landing.id}`} target="_blank">
-                                                    <ExternalLink size={16} />
-                                                </Link>
-                                            </Button>
-                                            <Button variant="ghost" size="icon" title="Editar" asChild>
-                                                <Link to={`/admin/editor/${landing.id}`}>
-                                                    <Edit size={16} className="text-blue-600" />
-                                                </Link>
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                title="Duplicar"
-                                                onClick={() => {
-                                                    setDuplicateItem(landing);
-                                                    setDupName(`${landing.name} (Copia)`);
-                                                    setDupSlug(`${landing.slug}-clon`);
-                                                }}
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Crear Nueva Landing Page</DialogTitle>
+                                    </DialogHeader>
+                                    <form onSubmit={handleCreate} className="space-y-4 py-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="category">Categoría en Menú</Label>
+                                            <select
+                                                id="category"
+                                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                value={category}
+                                                onChange={(e) => setCategory(e.target.value)}
                                             >
-                                                {duplicateMutation.isPending ? (
-                                                    <Loader2 size={16} className="animate-spin text-amber-600" />
-                                                ) : (
-                                                    <Copy size={16} className="text-amber-600" />
-                                                )}
-                                            </Button>
-                                            <Button variant="ghost" size="icon" title="Eliminar" onClick={() => setDeleteId(landing.id)}>
-                                                <Trash2 size={16} className="text-red-600" />
-                                            </Button>
+                                                <option value="">-- No incluír en menú --</option>
+                                                {menuCategories.map(cat => (
+                                                    <option key={cat.label} value={cat.label}>{cat.label}</option>
+                                                ))}
+                                            </select>
+                                            <p className="text-xs text-muted-foreground">Selecciona dónde aparecerá el enlace a esta landing.</p>
                                         </div>
-                                    </TableCell>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="name">Nombre del Seguro</Label>
+                                            <Input
+                                                id="name"
+                                                value={newName}
+                                                onChange={handleNameChange}
+                                                placeholder="Ej: Seguro de Vida"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="slug">URL Amigable (Slug)</Label>
+                                            <Input
+                                                id="slug"
+                                                value={newSlug}
+                                                onChange={(e) => setNewSlug(e.target.value)}
+                                                placeholder="/seguros/ejemplo"
+                                                required
+                                            />
+                                        </div>
+                                        <DialogFooter>
+                                            <Button type="submit" disabled={createMutation.isPending}>
+                                                {createMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                                Crear Landing
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-lg border shadow-sm">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Nombre</TableHead>
+                                    <TableHead>Categoría</TableHead>
+                                    <TableHead>URL</TableHead>
+                                    <TableHead className="text-center">Destacado</TableHead>
+                                    <TableHead>Última Modificación</TableHead>
+                                    <TableHead className="text-right">Acciones</TableHead>
                                 </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
+                            </TableHeader>
+                            <TableBody>
+                                {isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                                            Cargando...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : landings.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                                            No hay landings creadas aún.
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    landings.map((landing: any) => (
+                                        <TableRow key={landing.id}>
+                                            <TableCell className="font-medium text-slate-700">
+                                                {landing.name}
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground text-sm">
+                                                {landing.menuCategory ? (
+                                                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium ring-1 ring-inset ring-blue-700/10">
+                                                        {landing.menuCategory}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-muted-foreground/50 text-xs italic">-</span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground font-mono text-sm">
+                                                {landing.slug}
+                                            </TableCell>
+                                            <TableCell className="text-center">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => toggleFeaturedMutation.mutate({ id: landing.id, isFeatured: !landing.isFeatured })}
+                                                    disabled={toggleFeaturedMutation.isPending}
+                                                    className={landing.isFeatured ? "text-yellow-500 hover:text-yellow-600" : "text-gray-300 hover:text-yellow-500"}
+                                                >
+                                                    {landing.isFeatured ? <Star size={18} fill="currentColor" /> : <StarOff size={18} />}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell>
+                                                {landing.updatedAt ? new Date(landing.updatedAt).toLocaleDateString() : '-'}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Button variant="ghost" size="icon" title="Ver" asChild>
+                                                        <Link to={`/admin/preview/${landing.id}`} target="_blank">
+                                                            <ExternalLink size={16} />
+                                                        </Link>
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" title="Editar" asChild>
+                                                        <Link to={`/admin/editor/${landing.id}`}>
+                                                            <Edit size={16} className="text-blue-600" />
+                                                        </Link>
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        title="Duplicar"
+                                                        onClick={() => {
+                                                            setDuplicateItem(landing);
+                                                            setDupName(`${landing.name} (Copia)`);
+                                                            setDupSlug(`${landing.slug}-clon`);
+                                                        }}
+                                                    >
+                                                        {duplicateMutation.isPending ? (
+                                                            <Loader2 size={16} className="animate-spin text-amber-600" />
+                                                        ) : (
+                                                            <Copy size={16} className="text-amber-600" />
+                                                        )}
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" title="Eliminar" onClick={() => setDeleteId(landing.id)}>
+                                                        <Trash2 size={16} className="text-red-600" />
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="menu">
+                    <MenuManager />
+                </TabsContent>
+            </Tabs>
 
             <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
                 <AlertDialogContent>

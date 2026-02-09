@@ -2,6 +2,7 @@
   "id": "6042fb2b-26b3-4ac7-a8af-d91403ab6627",
   "name": "Seguro de Edificio",
   "slug": "/seguros/edificio",
+  "menuCategory": "Seguros Comunidades",
   "createdAt": "2026-01-27T15:05:05.361Z",
   "updatedAt": "2026-02-05T17:32:50.442Z",
   "content": {

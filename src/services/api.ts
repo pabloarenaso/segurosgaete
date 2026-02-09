@@ -126,6 +126,10 @@ export const landingService = {
                 return { items: [] };
             }
         }
+    },
+    saveMenu: async (menuData: any) => {
+        const response = await api.post('/menu', menuData);
+        return response.data;
     }
 };
 

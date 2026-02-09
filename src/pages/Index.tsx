@@ -127,6 +127,7 @@ const Index = () => {
   });
 
   // Get unique categories for filter (Combine existing + predefined)
+  // Get unique categories for filter (Combine existing + predefined)
   const existingCategories = new Set(landings.map((l: any) => l.menuCategory).filter(Boolean));
   const categories = Array.from(new Set([...MENU_CATEGORIES, ...Array.from(existingCategories)]));
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Image as ImageIcon, Check, Loader2, Upload } from "lucide-react";
@@ -13,6 +13,12 @@ interface ImagePickerProps {
 const ImagePicker = ({ onSelect, currentImage }: ImagePickerProps) => {
     const [open, setOpen] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [imageError, setImageError] = useState(false); // New state to handle broken images
+
+    // Reset error when image changes
+    useEffect(() => {
+        setImageError(false);
+    }, [currentImage]);
 
     // Fetch real images
     const { data: images = [], isLoading } = useQuery({
@@ -41,21 +47,15 @@ const ImagePicker = ({ onSelect, currentImage }: ImagePickerProps) => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <div className="relative group cursor-pointer border-2 border-dashed rounded-lg p-2 hover:bg-slate-50 transition-colors">
-                    {currentImage ? (
+                    {currentImage && !imageError ? (
                         <div className="relative aspect-video w-full overflow-hidden rounded bg-slate-100">
                             <img
                                 src={currentImage}
                                 alt="Imagen de fondo"
                                 className="w-full h-full object-cover"
-                                onError={(e) => {
-                                    e.currentTarget.style.display = 'none';
-                                    e.currentTarget.parentElement?.classList.add('hidden');
-                                    // Fallback to showing the placeholder (by hiding this completely? No that would hide the trigger)
-                                    // Better: switch to placeholder mode. But we can't easily switch state from here without invalidating prop.
-                                    // Simple fix for now: Show a text or icon overlay.
-                                }}
+                                onError={() => setImageError(true)}
                             />
-                            {/* If image breaks, the alt text shows. Let's make sure we handle it visually if possible, but simplest is just better alt text */}
+                            {/* Overlay to change image */}
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="text-white text-sm font-medium">Cambiar Imagen</span>
                             </div>

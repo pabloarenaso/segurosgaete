@@ -48,19 +48,111 @@ const Editor = () => {
         onSuccess: (data) => {
             setLanding(data); // Resets dirty state
             queryClient.invalidateQueries({ queryKey: ['landings'] });
+            queryClient.invalidateQueries({ queryKey: ['menu'] }); // Invalidate menu too
             toast.success("Cambios guardados exitosamente");
-            setLanding(data); // Resets dirty state
-            queryClient.invalidateQueries({ queryKey: ['landings'] });
-            toast.success("Cambios guardados exitosamente");
-            // navigate('/admin/landings'); // Removed navigation as per user request
         },
         onError: () => {
             toast.error("Error al guardar los cambios");
         }
     });
 
-    const handleSave = () => {
+    // Fetch Menu for categories and syncing
+    const { data: menuConfig } = useQuery({
+        queryKey: ['menu'],
+        queryFn: landingService.getMenu
+    });
+
+    // Helper to get categories (same as Dashboard)
+    const getCategories = (items: any[], depth = 0): any[] => {
+        let cats: any[] = [];
+        items.forEach(item => {
+            const isCategory = item.type === 'category' || (item.items && item.items.length > 0);
+            if (isCategory) {
+                const isRootContainer = depth === 0;
+                if (!isRootContainer) {
+                    cats.push({ label: item.label, type: 'category' });
+                }
+                if (item.items) {
+                    cats = [...cats, ...getCategories(item.items, depth + 1)];
+                }
+            }
+        });
+        return cats;
+    };
+
+    const rawCategories = menuConfig?.items ? getCategories(menuConfig.items) : [];
+    const menuCategories = Array.from(new Set(rawCategories.map(c => c.label)))
+        .map(label => rawCategories.find(c => c.label === label));
+
+    const handleMenuUpdate = async (newCategory: string) => {
+        if (!menuConfig) return;
+        const newMenu = JSON.parse(JSON.stringify(menuConfig));
+
+        // 1. Remove from old location (by slug)
+        // We always remove first to ensure no duplicates if moving or just updating slug
+        const removeRecursive = (items: any[]) => {
+            return items.filter(item => {
+                if (item.href === currentLanding.slug) return false;
+                if (item.items) item.items = removeRecursive(item.items);
+                return true;
+            });
+        };
+        newMenu.items = removeRecursive(newMenu.items);
+
+        // 2. Add to new category if selected
+        if (newCategory) {
+            const catIndex = newMenu.items.findIndex((item: any) => item.label === newCategory);
+            // Note: This finds top-level categories. If we support nested categories, we need recursive find.
+            // For now, let's assume top-level or use a recursive finder if needed.
+            // Actually, `menuCategories` flattens them, but `newMenu.items` is tree.
+            // Let's implement recursive find for the category to add to.
+
+            const findCategoryAndAdd = (items: any[]) => {
+                for (const item of items) {
+                    if (item.label === newCategory && (item.type === 'category' || item.items)) {
+                        if (!item.items) item.items = [];
+                        item.items.push({
+                            label: currentLanding.name,
+                            href: currentLanding.slug,
+                            type: 'landing'
+                        });
+                        return true;
+                    }
+                    if (item.items && findCategoryAndAdd(item.items)) return true;
+                }
+                return false;
+            };
+
+            findCategoryAndAdd(newMenu.items);
+        }
+
+        await landingService.saveMenu(newMenu);
+    };
+
+    const handleSave = async () => {
         if (!currentLanding) return;
+
+        // Check if sensitive fields changed that require menu update
+        // We compare with `landing` (original fetch)
+        if (landing) {
+            const categoryChanged = currentLanding.menuCategory !== landing.menuCategory;
+            const slugChanged = currentLanding.slug !== landing.slug;
+            const nameChanged = currentLanding.name !== landing.name;
+
+            if (categoryChanged || slugChanged || nameChanged) {
+                // Update menu first (or after? better before so if it fails we know)
+                // But wait, if we update menu, we need the NEW values. 
+                // `currentLanding` has the new values.
+                try {
+                    // If category is cleared, it will just remove. If changed, remove + add.
+                    await handleMenuUpdate(currentLanding.menuCategory || '');
+                } catch (e) {
+                    console.error("Failed to update menu", e);
+                    toast.error("Error al actualizar el menú, pero se guardará la landing.");
+                }
+            }
+        }
+
         saveMutation.mutate(currentLanding);
     };
 
@@ -103,6 +195,20 @@ const Editor = () => {
                                         <DialogTitle>Configuración de la Landing</DialogTitle>
                                     </DialogHeader>
                                     <div className="space-y-4 py-4">
+                                        <div className="space-y-2">
+                                            <Label>Categoría en Menú</Label>
+                                            <select
+                                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                value={currentLanding?.menuCategory || ''}
+                                                onChange={(e) => updateLanding({ menuCategory: e.target.value })}
+                                            >
+                                                <option value="">-- No incluír en menú --</option>
+                                                {menuCategories.map((cat: any) => (
+                                                    <option key={cat.label} value={cat.label}>{cat.label}</option>
+                                                ))}
+                                            </select>
+                                            <p className="text-xs text-muted-foreground">Define dónde aparecerá esta landing en el menú principal.</p>
+                                        </div>
                                         <div className="space-y-2">
                                             <Label>Nombre Interno</Label>
                                             <Input

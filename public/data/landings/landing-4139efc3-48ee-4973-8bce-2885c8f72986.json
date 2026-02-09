@@ -1,0 +1,76 @@
+{
+  "id": "4139efc3-48ee-4973-8bce-2885c8f72986",
+  "name": "Prueba",
+  "slug": "/seguros-comunidades/prueba",
+  "menuCategory": "Seguros Comunidades",
+  "isFeatured": false,
+  "createdAt": "2026-02-09T13:45:31.200Z",
+  "updatedAt": "2026-02-09T14:17:15.584Z",
+  "content": {
+    "hero": {
+      "title": "Prueba",
+      "subtitle": "Prueba",
+      "backgroundImage": "/images/uploads/guardia-hero-v2.png"
+    },
+    "form": {
+      "title": "Cotiza tu Seguro",
+      "fields": [
+        {
+          "id": "nombre",
+          "label": "Nombre*",
+          "type": "text",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "email",
+          "label": "Email*",
+          "type": "email",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "telefono",
+          "label": "Teléfono",
+          "type": "tel",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "cargo",
+          "label": "Cargo*",
+          "type": "select",
+          "options": [
+            "Administrador",
+            "Presidente"
+          ]
+        }
+      ]
+    },
+    "coverages": {
+      "title": "¿Qué protege?",
+      "subtitle": "Coberturas",
+      "items": []
+    },
+    "benefits": {
+      "title": "¿Por qué nosotros?",
+      "subtitle": "Beneficios",
+      "items": []
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "video": {
+        "title": "",
+        "iframeUrl": "https://youtu.be/LXb3EKWsInQ",
+        "thumbnail": ""
+      },
+      "questions": []
+    },
+    "resources": {
+      "visible": false,
+      "title": "Recursos",
+      "subtitle": "",
+      "enabledResourceIds": []
+    }
+  }
+}
