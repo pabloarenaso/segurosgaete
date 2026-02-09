@@ -485,7 +485,7 @@ app.post('/api/upload', requireAuth, upload.single('file'), (req, res) => {
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // SPA Catch-all: Send index.html for any route not handled by API
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
