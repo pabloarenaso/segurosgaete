@@ -486,7 +486,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 // SPA Catch-all: Send index.html for any route not handled by API
 // SPA Catch-all: Send index.html for any route not handled by API
-app.get('/:splat*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
