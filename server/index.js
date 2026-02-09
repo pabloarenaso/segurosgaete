@@ -481,6 +481,15 @@ app.post('/api/upload', requireAuth, upload.single('file'), (req, res) => {
     res.json({ url: baseUrl + req.file.filename });
 });
 
+// Serve the frontend (React app)
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// SPA Catch-all: Send index.html for any route not handled by API
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+// Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({
@@ -489,6 +498,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
