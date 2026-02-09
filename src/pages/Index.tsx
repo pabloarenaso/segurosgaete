@@ -132,39 +132,44 @@ const Index = () => {
 
   const filteredLandings = landings.filter((l: any) => {
     // 1. Text Search
-    const landingName = l.name || "";
-    const matchesSearch = landingName.toLowerCase().includes(searchTerm.toLowerCase());
+    const landingName = (l.name || "").toLowerCase();
+    const searchLower = searchTerm.toLowerCase();
+    const matchesSearch = landingName.includes(searchLower);
+
     // 2. Category Filter
-    const matchesCategory = selectedCategory === "all" || l.menuCategory === selectedCategory;
+    // Normalize categories for comparison (trim strings)
+    const landingCategory = (l.menuCategory || "").trim();
+    const currentCategory = selectedCategory;
+
+    // Case insensitive comparison logic
+    const matchesCategory = currentCategory === "all" || landingCategory.toLowerCase() === currentCategory.toLowerCase();
 
     // Decision: 
-    // If Searching OR Filtering -> Show all matches (ignore isFeatured)
-    // If NO Search AND NO Filter -> Show only Featured (Default view)
+    // If Searching OR Filtering -> Show all matches (ignore isFeatured/featured priority, just show what matches)
     const isActiveSearch = searchTerm !== "" || selectedCategory !== "all";
 
     if (isActiveSearch) {
       return matchesSearch && matchesCategory;
     } else {
+      // Default View (No interaction): Only Featured
       return l.isFeatured === true;
     }
   });
 
-  // Limit featured display if no search is active
-  // Fallback: If no landings are featured, show recent ones (limit 6) to avoid empty section.
+  // Display Logic
   let displayLandings = [];
-
   const isActiveSearch = searchTerm !== "" || selectedCategory !== "all";
 
   if (isActiveSearch) {
     displayLandings = filteredLandings;
   } else {
     // Default view: Show Featured
-    const featured = filteredLandings.filter((l: any) => l.isFeatured === true);
-    if (featured.length > 0) {
-      displayLandings = featured.slice(0, 6);
+    // Since filteredLandings already handles the logic above (returning only featured if !isActiveSearch),
+    // we can just use it. However, keeping the slice limit logic for default view is good.
+    if (filteredLandings.length > 0) {
+      displayLandings = filteredLandings.slice(0, 6);
     } else {
-      // Fallback: Show all (limit 6) if none are featured
-      // This ensures the section isn't empty if the user hasn't marked anything as featured yet.
+      // Fallback: Show all (limit 6) recent if none are featured
       displayLandings = landings.slice(0, 6);
     }
   }
