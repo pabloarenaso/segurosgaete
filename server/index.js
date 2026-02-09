@@ -191,8 +191,8 @@ app.post('/api/landings', requireAuth, async (req, res) => {
             id,
             name,
             slug,
+            menuCategory: newLanding.menuCategory,
             isFeatured: newLanding.isFeatured,
-            createdAt: newLanding.createdAt,
             createdAt: newLanding.createdAt,
             updatedAt: newLanding.updatedAt,
             content: { hero: newLanding.content.hero }
@@ -250,8 +250,7 @@ app.put('/api/landings/:id', requireAuth, async (req, res) => {
                 ...indexData[indexIndex],
                 name: updatedLanding.name,
                 slug: updatedLanding.slug,
-                isFeatured: updatedLanding.isFeatured,
-                slug: updatedLanding.slug,
+                menuCategory: updatedLanding.menuCategory || "",
                 isFeatured: updatedLanding.isFeatured,
                 updatedAt: updatedLanding.updatedAt,
                 content: { hero: updatedLanding.content.hero }
